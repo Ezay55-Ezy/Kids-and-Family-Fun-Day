@@ -54,38 +54,48 @@ const statusLabels: Record<string, string> = {
 function DeleteButton({ eventId, onDeleted }: { eventId: string; onDeleted: () => void }) {
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleDelete = async () => {
     setDeleting(true);
+    setError('');
     try {
       const res = await fetch(`/api/admin/events/${eventId}`, { method: 'DELETE' });
       if (res.ok) {
         onDeleted();
+      } else {
+        const data = await res.json();
+        setError(data.error || 'Failed to delete event');
       }
+    } catch {
+      setError('Network error — please try again');
     } finally {
       setDeleting(false);
       setConfirming(false);
     }
   };
 
-  if (confirming) {
+  if (confirming || error) {
     return (
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={handleDelete}
-          disabled={deleting}
-          className="text-xs font-medium text-paper bg-coral rounded px-2 py-1 hover:bg-coral/90 disabled:opacity-50"
-        >
-          {deleting ? '...' : 'Confirm'}
-        </button>
-        <button
-          type="button"
-          onClick={() => setConfirming(false)}
-          className="text-xs font-medium text-ink/50 hover:text-ink"
-        >
-          Cancel
-        </button>
+      <div className="flex flex-col items-start gap-1">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={deleting}
+            className="text-xs font-medium text-paper bg-coral rounded px-2 py-1 hover:bg-coral/90 disabled:opacity-50"
+          >
+            {deleting ? '...' : 'Confirm'}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setConfirming(false); setError(''); }}
+            className="text-xs font-medium text-ink/50 hover:text-ink"
+          >
+            Cancel
+          </button>
+        </div>
+        {error && <p className="text-xs text-coral">{error}</p>}
       </div>
     );
   }

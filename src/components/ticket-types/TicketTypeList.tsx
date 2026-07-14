@@ -141,9 +141,16 @@ export default function TicketTypeList({ eventId }: { eventId: string }) {
   };
 
   const handleDelete = async (id: string) => {
-    const res = await fetch(`/api/admin/ticket-types/${id}`, { method: 'DELETE' });
-    if (res.ok) {
-      fetchTicketTypes();
+    try {
+      const res = await fetch(`/api/admin/ticket-types/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchTicketTypes();
+      } else {
+        const data = await res.json();
+        setError(data.error || 'Failed to delete ticket type');
+      }
+    } catch {
+      setError('Network error — please try again');
     }
   };
 
@@ -333,38 +340,48 @@ export default function TicketTypeList({ eventId }: { eventId: string }) {
 function DeleteButton({ ticketTypeId, onDeleted }: { ticketTypeId: string; onDeleted: () => void }) {
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleDelete = async () => {
     setDeleting(true);
+    setError('');
     try {
       const res = await fetch(`/api/admin/ticket-types/${ticketTypeId}`, { method: 'DELETE' });
       if (res.ok) {
         onDeleted();
+      } else {
+        const data = await res.json();
+        setError(data.error || 'Failed to delete');
       }
+    } catch {
+      setError('Network error');
     } finally {
       setDeleting(false);
       setConfirming(false);
     }
   };
 
-  if (confirming) {
+  if (confirming || error) {
     return (
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={handleDelete}
-          disabled={deleting}
-          className="text-xs font-medium text-paper bg-coral rounded px-2 py-1 hover:bg-coral/90 disabled:opacity-50"
-        >
-          {deleting ? '...' : 'Confirm'}
-        </button>
-        <button
-          type="button"
-          onClick={() => setConfirming(false)}
-          className="text-xs font-medium text-ink/50 hover:text-ink"
-        >
-          Cancel
-        </button>
+      <div className="flex flex-col items-start gap-1">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={deleting}
+            className="text-xs font-medium text-paper bg-coral rounded px-2 py-1 hover:bg-coral/90 disabled:opacity-50"
+          >
+            {deleting ? '...' : 'Confirm'}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setConfirming(false); setError(''); }}
+            className="text-xs font-medium text-ink/50 hover:text-ink"
+          >
+            Cancel
+          </button>
+        </div>
+        {error && <p className="text-xs text-coral">{error}</p>}
       </div>
     );
   }

@@ -227,7 +227,7 @@ model Ticket {
   ticketCode String       @unique // encoded into the QR
   status     TicketStatus @default(VALID)
 
-  event   Event  @relation(fields: [eventId], references: [id])
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId String
 
   user   User   @relation(fields: [userId], references: [id])
@@ -256,9 +256,9 @@ model BookingItem {
   unitPrice  Decimal @db.Decimal(10, 2)
   subtotal   Decimal @db.Decimal(10, 2)
 
-  booking    Booking    @relation(fields: [bookingId], references: [id])
+  booking    Booking    @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   bookingId  String
-  ticketType TicketType @relation(fields: [ticketTypeId], references: [id])
+  ticketType TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
   ticketTypeId String
 
   createdAt DateTime @default(now())
@@ -278,7 +278,7 @@ model Payment {
   checkoutRequestId  String? @unique // from Daraja STK push
 
   ticket  Ticket?
-  booking Booking? @relation(fields: [bookingId], references: [id])
+  booking Booking? @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   bookingId String?
 
   createdAt DateTime @default(now())
@@ -330,7 +330,7 @@ model Service {
   isArchived  Boolean          @default(false)
   viewCount   Int              @default(0)
 
-  vendor   Vendor @relation(fields: [vendorId], references: [id])
+  vendor   Vendor @relation(fields: [vendorId], references: [id], onDelete: Cascade)
   vendorId String
 
   bookings Booking[]
@@ -359,7 +359,7 @@ model Booking {
   service  Service? @relation(fields: [serviceId], references: [id])
   serviceId String?
 
-  event   Event?  @relation(fields: [eventId], references: [id])
+  event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId String?
 
   items      BookingItem[]
@@ -403,9 +403,9 @@ model Sponsor {
 
 // Join table: an event can have many sponsors, a sponsor can back many events
 model EventSponsor {
-  event     Event   @relation(fields: [eventId], references: [id])
+  event     Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId   String
-  sponsor   Sponsor @relation(fields: [sponsorId], references: [id])
+  sponsor   Sponsor @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
   sponsorId String
 
   createdAt DateTime @default(now())
@@ -426,7 +426,7 @@ model Gallery {
   displayOrder Int     @default(0)
   isPublished  Boolean @default(true)
 
-  event   Event?  @relation(fields: [eventId], references: [id])
+  event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId String?
 
   createdAt DateTime @default(now())
@@ -442,10 +442,10 @@ model Review {
   comment String?
   status  ReviewStatus @default(PUBLISHED)
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  event   Event  @relation(fields: [eventId], references: [id])
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId String
 
   createdAt DateTime @default(now())
@@ -462,7 +462,7 @@ model Notification {
   message String
   isRead  Boolean          @default(false)
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   createdAt DateTime @default(now())
@@ -476,7 +476,7 @@ model PushSubscription {
   p256dh    String
   auth      String
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   createdAt DateTime @default(now())
