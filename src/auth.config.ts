@@ -29,6 +29,7 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.id = (user as { id: string }).id;
         token.role = (user as { role?: string }).role;
+        token.isActive = (user as { isActive?: boolean }).isActive ?? true;
       }
       return token;
     },
@@ -37,6 +38,7 @@ export const authConfig: NextAuthConfig = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.isActive = (token.isActive as boolean) ?? true;
       }
       return session;
     },
@@ -44,6 +46,7 @@ export const authConfig: NextAuthConfig = {
     async authorized({ request, auth }) {
       const { pathname } = request.nextUrl;
       const isLoggedIn = !!auth?.user;
+      const isSuspended = isLoggedIn && auth!.user!.isActive === false;
       const isAuthPage = pathname === '/auth/login' || pathname === '/auth/register';
       const isProtectedRoute =
         pathname.startsWith('/admin') ||
@@ -56,7 +59,14 @@ export const authConfig: NextAuthConfig = {
 
       if (isProtectedRoute && !isLoggedIn) return false;
 
+      if (isProtectedRoute && isSuspended) {
+        return Response.redirect(new URL('/auth/login?suspended=true', request.nextUrl.origin));
+      }
+
       if (isAuthPage && isLoggedIn) {
+        if (isSuspended) {
+          return Response.redirect(new URL('/auth/login?suspended=true', request.nextUrl.origin));
+        }
         const role = auth!.user!.role;
         if (role === 'ADMIN') {
           return Response.redirect(new URL('/admin', request.nextUrl.origin));
