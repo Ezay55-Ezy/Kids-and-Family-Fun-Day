@@ -9,8 +9,44 @@ export const dynamic = 'force-dynamic';
 export default async function HomePage() {
   const now = new Date();
 
-  const [eventCount, vendorCount, upcomingEvents, vendors, sponsors, reviews, ratingAgg] =
-    await Promise.all([
+  let eventCount = 0;
+  let vendorCount = 0;
+  let upcomingEvents: Array<{
+    id: string;
+    slug: string;
+    title: string;
+    location: string;
+    startDate: Date;
+    endDate: Date;
+    shortDescription: string | null;
+    bannerImageUrl: string | null;
+    category: { name: string } | null;
+  }> = [];
+  let vendors: Array<{
+    id: string;
+    businessName: string;
+    services: Array<{ name: string; shortDescription: string | null }>;
+  }> = [];
+  let sponsors: Array<{
+    id: string;
+    companyName: string;
+    logoUrl: string | null;
+    tier: string;
+    websiteUrl: string | null;
+  }> = [];
+  let reviews: Array<{
+    id: string;
+    rating: number;
+    comment: string | null;
+    createdAt: Date;
+    user: { name: string | null };
+    event: { title: string };
+  }> = [];
+  let avgRating = 0;
+  let reviewCount = 0;
+
+  try {
+    const results = await Promise.all([
       prisma.event.count({ where: { status: 'PUBLISHED' } }),
       prisma.vendor.count({ where: { status: 'ACTIVE' } }),
       prisma.event.findMany({
@@ -67,8 +103,17 @@ export default async function HomePage() {
       }),
     ]);
 
-  const avgRating = ratingAgg._avg.rating ?? 0;
-  const reviewCount = ratingAgg._count.rating;
+    eventCount = results[0];
+    vendorCount = results[1];
+    upcomingEvents = results[2];
+    vendors = results[3];
+    sponsors = results[4];
+    reviews = results[5];
+    avgRating = results[6]._avg.rating ?? 0;
+    reviewCount = results[6]._count.rating;
+  } catch (e) {
+    console.error('[HomePage] Failed to load data:', e);
+  }
 
   return (
     <div className="min-h-screen bg-paper pb-20 lg:pb-0">
