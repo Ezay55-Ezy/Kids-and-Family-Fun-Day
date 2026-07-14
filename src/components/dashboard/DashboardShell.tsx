@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import PushSetup from './PushSetup';
 import { useTheme } from './ThemeProvider';
@@ -75,6 +75,7 @@ interface NotificationItem {
 
 export default function DashboardShell({ user, initialUnreadCount, vapidPublicKey, navItems, bottomNavItems = [], children }: DashboardShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { theme, toggleTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -281,7 +282,7 @@ export default function DashboardShell({ user, initialUnreadCount, vapidPublicKe
           ))}
           <button
             type="button"
-            onClick={() => signOut({ callbackUrl: '/' })}
+            onClick={async () => { await signOut({ redirect: false }); router.replace('/'); }}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-paper/60 hover:bg-coral/20 hover:text-coral transition-colors"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -452,10 +453,10 @@ export default function DashboardShell({ user, initialUnreadCount, vapidPublicKe
                 <div className="border-t border-ink/10 my-1" />
                 <button
                   type="button"
-                  onClick={() => {
-                    setUserDropdownOpen(false)
-;
-                    signOut({ callbackUrl: '/' });
+                  onClick={async () => {
+                    setUserDropdownOpen(false);
+                    await signOut({ redirect: false });
+                    router.replace('/');
                   }}
                   className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-coral hover:bg-coral/5 transition-colors"
                 >

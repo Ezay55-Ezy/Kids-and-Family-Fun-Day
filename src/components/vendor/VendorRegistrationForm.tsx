@@ -147,7 +147,8 @@ export default function VendorRegistrationForm() {
         return;
       }
 
-      await signOut({ callbackUrl: '/auth/login?vendor_registered=true' });
+      await signOut({ redirect: false });
+      router.replace('/auth/login?vendor_registered=true');
     } catch {
       setErrors((prev) => ({
         ...prev,
