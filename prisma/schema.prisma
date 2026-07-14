@@ -1,0 +1,493 @@
+// =================================================================
+// Kids & Family Fun Day Kenya — Prisma Schema
+// =================================================================
+// Design principles applied throughout:
+// - Decimal for all money fields (never Float)
+// - Enums for all status/role fields (DB-level validation)
+// - cuid() IDs (safe to expose in URLs, collision-resistant)
+// - createdAt/updatedAt on every model (auditability)
+// - Explicit indexes on foreign keys + commonly filtered fields
+// =================================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------
+
+enum UserRole {
+  CUSTOMER
+  VENDOR
+  SPONSOR
+  ADMIN
+}
+
+enum VendorStatus {
+  PENDING_REVIEW
+  APPROVED_AWAITING_PAYMENT
+  ACTIVE
+  REJECTED
+}
+
+enum SponsorTier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  SOLD_OUT
+  CANCELLED
+  COMPLETED
+}
+
+enum TicketStatus {
+  VALID
+  USED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum PaymentProvider {
+  MPESA
+  CARD
+  CASH
+}
+
+enum BookingStatus {
+  REQUESTED
+  CONFIRMED
+  DECLINED
+  COMPLETED
+  CANCELLED
+}
+
+enum PricingType {
+  FIXED
+  STARTING_FROM
+  CONTACT_VENDOR
+}
+
+enum ServiceCategory {
+  CATERING
+  PHOTOGRAPHY
+  ENTERTAINMENT
+  DECORATIONS
+  EQUIPMENT_RENTAL
+  KIDS_ACTIVITIES
+  TRANSPORT
+  OTHER
+}
+
+enum ReviewStatus {
+  PUBLISHED
+  HIDDEN
+}
+
+enum NotificationType {
+  BOOKING_UPDATE
+  PAYMENT_UPDATE
+  VENDOR_STATUS
+  EVENT_ANNOUNCEMENT
+  SYSTEM
+}
+
+// -----------------------------------------------------------------
+// CORE IDENTITY
+// -----------------------------------------------------------------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  passwordHash  String?
+  phone         String?   @unique
+  role          UserRole  @default(CUSTOMER)
+  isActive      Boolean   @default(true)
+  suspendedAt   DateTime?
+  emailVerified DateTime?
+  image         String?
+
+  passwordResetToken   String?   @unique
+  passwordResetExpiry  DateTime?
+
+  // Relations
+  vendor          Vendor?
+  sponsor         Sponsor?
+  bookings          Booking[]
+  tickets           Ticket[]
+  reviews           Review[]
+  notifications     Notification[]
+  pushSubscriptions PushSubscription[]
+  eventsCreated     Event[]        @relation("EventCreatedBy")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([role])
+}
+
+// -----------------------------------------------------------------
+// EVENTS
+// -----------------------------------------------------------------
+
+model Category {
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  events Event[]
+
+  createdAt DateTime @default(now())
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String      @unique
+  shortDescription String?
+  description String
+  status      EventStatus @default(DRAFT)
+
+  startDate DateTime
+  endDate   DateTime
+  location  String
+
+  bannerImageUrl String?
+  ticketPrice    Decimal @db.Decimal(10, 2)
+  capacity       Int
+  ticketsSold    Int     @default(0)
+
+  registrationOpenDate  DateTime?
+  registrationCloseDate DateTime?
+
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+
+  createdBy   User   @relation("EventCreatedBy", fields: [createdById], references: [id])
+  createdById String
+
+  ticketTypes TicketType[]
+  tickets     Ticket[]
+  bookings    Booking[]
+  gallery  Gallery[]
+  reviews  Review[]
+  sponsors EventSponsor[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([startDate])
+  @@index([categoryId])
+}
+
+// -----------------------------------------------------------------
+// TICKETING
+// -----------------------------------------------------------------
+
+model TicketType {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  capacity    Int
+  ticketsSold Int      @default(0)
+
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId String
+
+  bookingItems BookingItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([eventId])
+}
+
+model Ticket {
+  id         String       @id @default(cuid())
+  ticketCode String       @unique // encoded into the QR
+  status     TicketStatus @default(VALID)
+
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  payment   Payment? @relation(fields: [paymentId], references: [id])
+  paymentId String?  @unique
+
+  scannedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([eventId])
+  @@index([userId])
+  @@index([status])
+}
+
+// -----------------------------------------------------------------
+// PAYMENTS
+// -----------------------------------------------------------------
+
+model BookingItem {
+  id         String  @id @default(cuid())
+  quantity   Int
+  unitPrice  Decimal @db.Decimal(10, 2)
+  subtotal   Decimal @db.Decimal(10, 2)
+
+  booking    Booking    @relation(fields: [bookingId], references: [id])
+  bookingId  String
+  ticketType TicketType @relation(fields: [ticketTypeId], references: [id])
+  ticketTypeId String
+
+  createdAt DateTime @default(now())
+
+  @@index([bookingId])
+  @@index([ticketTypeId])
+}
+
+model Payment {
+  id       String          @id @default(cuid())
+  amount   Decimal         @db.Decimal(10, 2)
+  provider PaymentProvider @default(MPESA)
+  status   PaymentStatus   @default(PENDING)
+
+  mpesaReceiptNumber String? @unique
+  mpesaPhoneNumber   String?
+  checkoutRequestId  String? @unique // from Daraja STK push
+
+  ticket  Ticket?
+  booking Booking? @relation(fields: [bookingId], references: [id])
+  bookingId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+// -----------------------------------------------------------------
+// VENDORS
+// -----------------------------------------------------------------
+
+model Vendor {
+  id          String       @id @default(cuid())
+  businessName String
+  description String
+  status      VendorStatus @default(PENDING_REVIEW)
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  services Service[]
+  bookings Booking[]
+
+  approvedAt     DateTime?
+  rejectedReason String?
+
+  activationDate      DateTime?
+  paymentVerifiedAt   DateTime?
+  paymentVerifiedById String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Service {
+  id          String           @id @default(cuid())
+  name        String
+  shortDescription String?
+  description String
+  category    ServiceCategory?
+  price       Decimal          @db.Decimal(10, 2)
+  pricingType PricingType      @default(FIXED)
+  imageUrl    String?
+  boothLocation String?
+  isActive    Boolean          @default(true)
+  isArchived  Boolean          @default(false)
+  viewCount   Int              @default(0)
+
+  vendor   Vendor @relation(fields: [vendorId], references: [id])
+  vendorId String
+
+  bookings Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([vendorId])
+  @@index([category])
+  @@index([isActive])
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  status      BookingStatus @default(REQUESTED)
+  notes       String?
+  totalAmount Decimal       @db.Decimal(10, 2)
+  ticketCode  String        @unique
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  vendor   Vendor? @relation(fields: [vendorId], references: [id])
+  vendorId String?
+
+  service  Service? @relation(fields: [serviceId], references: [id])
+  serviceId String?
+
+  event   Event?  @relation(fields: [eventId], references: [id])
+  eventId String?
+
+  items      BookingItem[]
+  payments   Payment[]
+  checkedInAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([vendorId])
+  @@index([userId])
+}
+
+// -----------------------------------------------------------------
+// SPONSORS
+// -----------------------------------------------------------------
+
+model Sponsor {
+  id            String      @id @default(cuid())
+  companyName   String
+  slug          String      @unique
+  description   String?
+  logoUrl       String?
+  websiteUrl    String?
+  tier          SponsorTier @default(BRONZE)
+  displayOrder  Int         @default(0)
+  isPublished   Boolean     @default(true)
+
+  user   User?  @relation(fields: [userId], references: [id])
+  userId String? @unique
+
+  events EventSponsor[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isPublished])
+  @@index([displayOrder])
+}
+
+// Join table: an event can have many sponsors, a sponsor can back many events
+model EventSponsor {
+  event     Event   @relation(fields: [eventId], references: [id])
+  eventId   String
+  sponsor   Sponsor @relation(fields: [sponsorId], references: [id])
+  sponsorId String
+
+  createdAt DateTime @default(now())
+
+  @@id([eventId, sponsorId])
+}
+
+// -----------------------------------------------------------------
+// CONTENT & ENGAGEMENT
+// -----------------------------------------------------------------
+
+model Gallery {
+  id           String  @id @default(cuid())
+  title        String?
+  description  String?
+  imageUrl     String
+  caption      String?
+  displayOrder Int     @default(0)
+  isPublished  Boolean @default(true)
+
+  event   Event?  @relation(fields: [eventId], references: [id])
+  eventId String?
+
+  createdAt DateTime @default(now())
+
+  @@index([eventId])
+  @@index([isPublished])
+  @@index([displayOrder])
+}
+
+model Review {
+  id      String @id @default(cuid())
+  rating  Int // 1-5, validate in application layer
+  comment String?
+  status  ReviewStatus @default(PUBLISHED)
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+
+  createdAt DateTime @default(now())
+
+  @@index([eventId])
+  @@index([status])
+  @@unique([userId, eventId]) // one review per user per event
+}
+
+model Notification {
+  id      String           @id @default(cuid())
+  type    NotificationType
+  title   String
+  message String
+  isRead  Boolean          @default(false)
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String
+  p256dh    String
+  auth      String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, endpoint])
+  @@index([userId])
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  subscribedAt DateTime @default(now())
+  isActive  Boolean  @default(true)
+}
