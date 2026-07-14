@@ -296,7 +296,7 @@ export default function DashboardShell({ user, initialUnreadCount, vapidPublicKe
       </aside>
 
       <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-ink/10 bg-paper/95 backdrop-blur-sm px-4 md:px-6">
+        <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-ink/10 bg-paper px-4 md:px-6">
           <button
             type="button"
             className="lg:hidden -ml-2 inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink hover:bg-ink/5 transition-colors"

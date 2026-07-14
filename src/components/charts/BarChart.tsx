@@ -16,7 +16,7 @@ export default function BarChart({ data, height = 200 }: BarChartProps) {
           <div key={item.label} className="flex flex-1 flex-col items-center gap-1.5 h-full justify-end">
             <span className="text-[11px] font-medium text-ink/60">{item.value}</span>
             <div
-              className="w-full rounded-t transition-all"
+              className="w-full rounded-t transition-[height]"
               style={{ height: `${pct}%`, backgroundColor: item.color, minHeight: item.value > 0 ? 4 : 0 }}
             />
             <span className="text-[10px] text-ink/40 truncate w-full text-center leading-tight">
