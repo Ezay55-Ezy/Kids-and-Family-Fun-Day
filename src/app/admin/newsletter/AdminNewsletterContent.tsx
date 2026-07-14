@@ -130,7 +130,7 @@ export default function AdminNewsletterContent() {
         <button
           onClick={handleExport}
           disabled={exporting || total === 0}
-          className="rounded-lg border border-ink/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:bg-ink/5 disabled:opacity-50"
+          className="rounded-lg border border-ink/10 bg-paper px-4 py-2 text-sm font-medium text-ink hover:bg-ink/5 disabled:opacity-50"
         >
           {exporting ? 'Exporting...' : 'Export CSV'}
         </button>
@@ -138,19 +138,19 @@ export default function AdminNewsletterContent() {
 
       {stats && (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Total Subscribers</p>
             <p className="mt-1 text-2xl font-bold text-ink">{stats.total}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Active</p>
             <p className="mt-1 text-2xl font-bold text-grass">{stats.active}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Last 7 Days</p>
             <p className="mt-1 text-2xl font-bold text-sky">{stats.recent7Days}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Last 30 Days</p>
             <p className="mt-1 text-2xl font-bold text-sun">{stats.recent30Days}</p>
           </div>
@@ -165,7 +165,7 @@ export default function AdminNewsletterContent() {
               onClick={() => updateParam('status', tab.value)}
               className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                 currentStatus === tab.value
-                  ? 'bg-white text-ink shadow-sm'
+                  ? 'bg-paper text-ink shadow-sm'
                   : 'text-ink/60 hover:text-ink'
               }`}
             >
@@ -179,7 +179,7 @@ export default function AdminNewsletterContent() {
             name="query"
             defaultValue={currentSearch}
             placeholder="Search by email..."
-            className="rounded-lg border border-ink/10 bg-white px-3 py-1.5 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+            className="rounded-lg border border-ink/10 bg-paper px-3 py-1.5 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
           />
           <button type="submit" className="rounded-lg bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-ink/90">
             Search
@@ -198,7 +198,7 @@ export default function AdminNewsletterContent() {
           ))}
         </div>
       ) : subscribers.length === 0 ? (
-        <div className="rounded-xl border border-ink/5 bg-white p-12 text-center">
+        <div className="rounded-xl border border-ink/5 bg-paper p-12 text-center">
           <p className="text-ink/40">No subscribers found</p>
         </div>
       ) : (
@@ -206,7 +206,7 @@ export default function AdminNewsletterContent() {
           {subscribers.map((sub) => (
             <div
               key={sub.id}
-              className="flex items-center justify-between rounded-xl border border-ink/5 bg-white p-4 transition-colors hover:border-sky/20 hover:bg-sky/5"
+              className="flex items-center justify-between rounded-xl border border-ink/5 bg-paper p-4 transition-colors hover:border-sky/20 hover:bg-sky/5"
             >
               <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky/10 text-sm font-bold text-sky">

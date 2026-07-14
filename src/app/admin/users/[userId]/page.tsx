@@ -170,26 +170,26 @@ export default function AdminUserDetailPage() {
       )}
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div className="rounded-xl border border-ink/5 bg-white p-4">
+        <div className="rounded-xl border border-ink/5 bg-paper p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Bookings</p>
           <p className="mt-1 text-2xl font-bold text-ink">{user._count.bookings}</p>
         </div>
-        <div className="rounded-xl border border-ink/5 bg-white p-4">
+        <div className="rounded-xl border border-ink/5 bg-paper p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Reviews</p>
           <p className="mt-1 text-2xl font-bold text-ink">{user._count.reviews}</p>
         </div>
-        <div className="rounded-xl border border-ink/5 bg-white p-4">
+        <div className="rounded-xl border border-ink/5 bg-paper p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Tickets</p>
           <p className="mt-1 text-2xl font-bold text-ink">{user._count.tickets}</p>
         </div>
-        <div className="rounded-xl border border-ink/5 bg-white p-4">
+        <div className="rounded-xl border border-ink/5 bg-paper p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Joined</p>
           <p className="mt-1 text-sm font-bold text-ink">{formatDate(user.createdAt)}</p>
         </div>
       </div>
 
       {user.phone && (
-        <div className="rounded-xl border border-ink/5 bg-white p-4">
+        <div className="rounded-xl border border-ink/5 bg-paper p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Phone</p>
           <p className="mt-1 text-ink">{user.phone}</p>
         </div>
@@ -203,7 +203,7 @@ export default function AdminUserDetailPage() {
       )}
 
       {user.bookings.length > 0 && (
-        <div className="rounded-xl border border-ink/5 bg-white p-4">
+        <div className="rounded-xl border border-ink/5 bg-paper p-4">
           <h2 className="mb-3 font-display text-lg font-semibold text-ink">Recent Bookings</h2>
           <div className="space-y-2">
             {user.bookings.map((booking) => (
@@ -223,7 +223,7 @@ export default function AdminUserDetailPage() {
       )}
 
       {user.reviews.length > 0 && (
-        <div className="rounded-xl border border-ink/5 bg-white p-4">
+        <div className="rounded-xl border border-ink/5 bg-paper p-4">
           <h2 className="mb-3 font-display text-lg font-semibold text-ink">Recent Reviews</h2>
           <div className="space-y-2">
             {user.reviews.map((review) => (

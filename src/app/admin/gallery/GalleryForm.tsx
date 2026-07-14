@@ -128,9 +128,9 @@ export default function GalleryForm({
             value={form.imageUrl}
             onChange={(e) => updateField('imageUrl', e.target.value)}
             placeholder="https://... or upload below"
-            className={`flex-1 rounded-lg border bg-white px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.imageUrl ? 'border-coral' : 'border-ink/10'}`}
+            className={`flex-1 rounded-lg border bg-paper px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.imageUrl ? 'border-coral' : 'border-ink/10'}`}
           />
-          <label className="cursor-pointer rounded-lg border border-ink/10 bg-white px-4 py-2 text-sm font-medium text-ink/60 hover:bg-ink/5">
+          <label className="cursor-pointer rounded-lg border border-ink/10 bg-paper px-4 py-2 text-sm font-medium text-ink/60 hover:bg-ink/5">
             {uploading ? 'Uploading...' : 'Upload'}
             <input
               ref={fileInputRef}
@@ -156,7 +156,7 @@ export default function GalleryForm({
           value={form.title}
           onChange={(e) => updateField('title', e.target.value)}
           placeholder="Optional title"
-          className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.title ? 'border-coral' : 'border-ink/10'}`}
+          className={`mt-1 w-full rounded-lg border bg-paper px-3 py-2 text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.title ? 'border-coral' : 'border-ink/10'}`}
         />
         {errors.title && <p className="mt-1 text-xs text-coral">{errors.title}</p>}
       </div>
@@ -168,7 +168,7 @@ export default function GalleryForm({
           onChange={(e) => updateField('description', e.target.value)}
           rows={3}
           placeholder="Optional description"
-          className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.description ? 'border-coral' : 'border-ink/10'}`}
+          className={`mt-1 w-full rounded-lg border bg-paper px-3 py-2 text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.description ? 'border-coral' : 'border-ink/10'}`}
         />
         {errors.description && <p className="mt-1 text-xs text-coral">{errors.description}</p>}
       </div>
@@ -179,7 +179,7 @@ export default function GalleryForm({
           value={form.caption}
           onChange={(e) => updateField('caption', e.target.value)}
           placeholder="Short caption (shown on hover)"
-          className="mt-1 w-full rounded-lg border border-ink/10 bg-white px-3 py-2 text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+          className="mt-1 w-full rounded-lg border border-ink/10 bg-paper px-3 py-2 text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
         />
       </div>
 
@@ -189,7 +189,7 @@ export default function GalleryForm({
           <select
             value={form.eventId}
             onChange={(e) => updateField('eventId', e.target.value)}
-            className="mt-1 w-full rounded-lg border border-ink/10 bg-white px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+            className="mt-1 w-full rounded-lg border border-ink/10 bg-paper px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
           >
             <option value="">No event (standalone)</option>
             {events.map((event) => (
@@ -203,7 +203,7 @@ export default function GalleryForm({
             type="number"
             value={form.displayOrder}
             onChange={(e) => updateField('displayOrder', parseInt(e.target.value) || 0)}
-            className="mt-1 w-full rounded-lg border border-ink/10 bg-white px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+            className="mt-1 w-full rounded-lg border border-ink/10 bg-paper px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
           />
         </div>
       </div>
@@ -236,7 +236,7 @@ export default function GalleryForm({
         </button>
         <Link
           href="/admin/gallery"
-          className="rounded-lg border border-ink/10 bg-white px-5 py-2 text-sm font-medium text-ink/60 hover:bg-ink/5"
+          className="rounded-lg border border-ink/10 bg-paper px-5 py-2 text-sm font-medium text-ink/60 hover:bg-ink/5"
         >
           Cancel
         </Link>

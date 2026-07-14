@@ -111,7 +111,7 @@ export default function SponsorForm({ existingData }: { existingData?: SponsorFo
         <input
           value={form.companyName}
           onChange={(e) => updateField('companyName', e.target.value)}
-          className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.companyName ? 'border-coral' : 'border-ink/10'}`}
+          className={`mt-1 w-full rounded-lg border bg-paper px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.companyName ? 'border-coral' : 'border-ink/10'}`}
         />
         {errors.companyName && <p className="mt-1 text-xs text-coral">{errors.companyName}</p>}
       </div>
@@ -121,7 +121,7 @@ export default function SponsorForm({ existingData }: { existingData?: SponsorFo
         <input
           value={form.slug}
           onChange={(e) => updateField('slug', e.target.value)}
-          className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 font-mono text-sm text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.slug ? 'border-coral' : 'border-ink/10'}`}
+          className={`mt-1 w-full rounded-lg border bg-paper px-3 py-2 font-mono text-sm text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.slug ? 'border-coral' : 'border-ink/10'}`}
         />
         {errors.slug && <p className="mt-1 text-xs text-coral">{errors.slug}</p>}
       </div>
@@ -132,7 +132,7 @@ export default function SponsorForm({ existingData }: { existingData?: SponsorFo
           value={form.description}
           onChange={(e) => updateField('description', e.target.value)}
           rows={3}
-          className="mt-1 w-full rounded-lg border border-ink/10 bg-white px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+          className="mt-1 w-full rounded-lg border border-ink/10 bg-paper px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
         />
       </div>
 
@@ -143,7 +143,7 @@ export default function SponsorForm({ existingData }: { existingData?: SponsorFo
             value={form.logoUrl}
             onChange={(e) => updateField('logoUrl', e.target.value)}
             placeholder="https://..."
-            className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.logoUrl ? 'border-coral' : 'border-ink/10'}`}
+            className={`mt-1 w-full rounded-lg border bg-paper px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.logoUrl ? 'border-coral' : 'border-ink/10'}`}
           />
           {errors.logoUrl && <p className="mt-1 text-xs text-coral">{errors.logoUrl}</p>}
         </div>
@@ -153,7 +153,7 @@ export default function SponsorForm({ existingData }: { existingData?: SponsorFo
             value={form.websiteUrl}
             onChange={(e) => updateField('websiteUrl', e.target.value)}
             placeholder="https://..."
-            className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.websiteUrl ? 'border-coral' : 'border-ink/10'}`}
+            className={`mt-1 w-full rounded-lg border bg-paper px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.websiteUrl ? 'border-coral' : 'border-ink/10'}`}
           />
           {errors.websiteUrl && <p className="mt-1 text-xs text-coral">{errors.websiteUrl}</p>}
         </div>
@@ -165,7 +165,7 @@ export default function SponsorForm({ existingData }: { existingData?: SponsorFo
           <select
             value={form.tier}
             onChange={(e) => updateField('tier', e.target.value)}
-            className="mt-1 w-full rounded-lg border border-ink/10 bg-white px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+            className="mt-1 w-full rounded-lg border border-ink/10 bg-paper px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
           >
             {tierOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -178,7 +178,7 @@ export default function SponsorForm({ existingData }: { existingData?: SponsorFo
             type="number"
             value={form.displayOrder}
             onChange={(e) => updateField('displayOrder', parseInt(e.target.value) || 0)}
-            className="mt-1 w-full rounded-lg border border-ink/10 bg-white px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+            className="mt-1 w-full rounded-lg border border-ink/10 bg-paper px-3 py-2 text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
           />
         </div>
       </div>
@@ -211,7 +211,7 @@ export default function SponsorForm({ existingData }: { existingData?: SponsorFo
         </button>
         <Link
           href="/admin/sponsors"
-          className="rounded-lg border border-ink/10 bg-white px-5 py-2 text-sm font-medium text-ink/60 hover:bg-ink/5"
+          className="rounded-lg border border-ink/10 bg-paper px-5 py-2 text-sm font-medium text-ink/60 hover:bg-ink/5"
         >
           Cancel
         </Link>

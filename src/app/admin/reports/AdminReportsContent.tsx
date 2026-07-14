@@ -266,7 +266,7 @@ export default function AdminReportsContent() {
             onClick={() => handleTypeChange(tab.value)}
             className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
               currentType === tab.value
-                ? 'bg-white text-ink shadow-sm'
+                ? 'bg-paper text-ink shadow-sm'
                 : 'text-ink/60 hover:text-ink'
             }`}
           >
@@ -278,19 +278,19 @@ export default function AdminReportsContent() {
       {/* Summary Cards */}
       {data && (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Total Records</p>
             <p className="mt-1 text-2xl font-bold text-ink">{data.stats.total.toLocaleString()}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Filtered</p>
             <p className="mt-1 text-2xl font-bold text-sky">{data.stats.filtered.toLocaleString()}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">This Page</p>
             <p className="mt-1 text-2xl font-bold text-grass">{data.rows.length}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Generated</p>
             <p className="mt-1 text-sm font-bold text-ink">{formatDate(data.stats.generatedAt)}</p>
           </div>
@@ -308,7 +308,7 @@ export default function AdminReportsContent() {
                 onClick={() => updateParam('status', opt.value)}
                 className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                   currentStatus === opt.value
-                    ? 'bg-white text-ink shadow-sm'
+                    ? 'bg-paper text-ink shadow-sm'
                     : 'text-ink/60 hover:text-ink'
                 }`}
               >
@@ -322,7 +322,7 @@ export default function AdminReportsContent() {
             <select
               value={currentRole}
               onChange={(e) => updateParam('role', e.target.value)}
-              className="rounded-lg border border-ink/10 bg-white px-3 py-1.5 text-xs font-medium text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+              className="rounded-lg border border-ink/10 bg-paper px-3 py-1.5 text-xs font-medium text-ink focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
             >
               {roleOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -338,7 +338,7 @@ export default function AdminReportsContent() {
               name="query"
               defaultValue={currentQuery}
               placeholder="Search..."
-              className="rounded-lg border border-ink/10 bg-white px-3 py-1.5 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+              className="rounded-lg border border-ink/10 bg-paper px-3 py-1.5 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
             />
             <button type="submit" className="rounded-lg bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-ink/90">
               Search
@@ -349,14 +349,14 @@ export default function AdminReportsContent() {
           <button
             onClick={() => handleExport('csv')}
             disabled={exporting || !data || data.rows.length === 0}
-            className="rounded-lg border border-ink/10 bg-white px-3 py-1.5 text-sm font-medium text-ink/60 hover:bg-ink/5 disabled:opacity-50"
+            className="rounded-lg border border-ink/10 bg-paper px-3 py-1.5 text-sm font-medium text-ink/60 hover:bg-ink/5 disabled:opacity-50"
           >
             {exporting ? '...' : 'CSV'}
           </button>
           <button
             onClick={() => handleExport('xlsx')}
             disabled={exporting || !data || data.rows.length === 0}
-            className="rounded-lg border border-ink/10 bg-white px-3 py-1.5 text-sm font-medium text-ink/60 hover:bg-ink/5 disabled:opacity-50"
+            className="rounded-lg border border-ink/10 bg-paper px-3 py-1.5 text-sm font-medium text-ink/60 hover:bg-ink/5 disabled:opacity-50"
           >
             {exporting ? '...' : 'Excel'}
           </button>
@@ -376,11 +376,11 @@ export default function AdminReportsContent() {
           ))}
         </div>
       ) : !data || data.rows.length === 0 ? (
-        <div className="rounded-xl border border-ink/5 bg-white p-12 text-center">
+        <div className="rounded-xl border border-ink/5 bg-paper p-12 text-center">
           <p className="text-ink/40">No data found for this report</p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-ink/5 bg-white">
+        <div className="overflow-x-auto rounded-xl border border-ink/5 bg-paper">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-ink/5 bg-ink/[0.02]">

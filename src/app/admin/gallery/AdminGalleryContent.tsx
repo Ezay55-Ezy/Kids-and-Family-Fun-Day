@@ -137,19 +137,19 @@ export default function AdminGalleryContent() {
 
       {stats && (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Total Images</p>
             <p className="mt-1 text-2xl font-bold text-ink">{stats.total}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Published</p>
             <p className="mt-1 text-2xl font-bold text-grass">{stats.published}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Draft</p>
             <p className="mt-1 text-2xl font-bold text-sun">{stats.draft}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-white p-4">
+          <div className="rounded-xl border border-ink/5 bg-paper p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Event-linked</p>
             <p className="mt-1 text-2xl font-bold text-sky">{stats.withEvent}</p>
           </div>
@@ -164,7 +164,7 @@ export default function AdminGalleryContent() {
               onClick={() => updateParam('status', tab.value)}
               className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                 currentStatus === tab.value
-                  ? 'bg-white text-ink shadow-sm'
+                  ? 'bg-paper text-ink shadow-sm'
                   : 'text-ink/60 hover:text-ink'
               }`}
             >
@@ -178,7 +178,7 @@ export default function AdminGalleryContent() {
             name="query"
             defaultValue={currentSearch}
             placeholder="Search images..."
-            className="rounded-lg border border-ink/10 bg-white px-3 py-1.5 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+            className="rounded-lg border border-ink/10 bg-paper px-3 py-1.5 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
           />
           <button type="submit" className="rounded-lg bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-ink/90">
             Search
@@ -197,7 +197,7 @@ export default function AdminGalleryContent() {
           ))}
         </div>
       ) : images.length === 0 ? (
-        <div className="rounded-xl border border-ink/5 bg-white p-12 text-center">
+        <div className="rounded-xl border border-ink/5 bg-paper p-12 text-center">
           <p className="text-ink/40">No gallery images found</p>
           <Link href="/admin/gallery/new" className="mt-3 inline-block text-sm text-sky hover:underline">
             Upload your first image
@@ -208,7 +208,7 @@ export default function AdminGalleryContent() {
           {images.map((image) => (
             <div
               key={image.id}
-              className="group overflow-hidden rounded-xl border border-ink/5 bg-white transition-colors hover:border-sky/20"
+              className="group overflow-hidden rounded-xl border border-ink/5 bg-paper transition-colors hover:border-sky/20"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-ink/5">
                 <img
