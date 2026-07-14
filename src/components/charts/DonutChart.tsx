@@ -32,7 +32,7 @@ export default function DonutChart({ data, size = 160 }: DonutChartProps) {
 
   return (
     <div className="flex flex-col items-center gap-3" style={{ width: size }}>
-      <svg width={size} height={size} viewBox="0 0 36 36" className="-rotate-90">
+      <svg width={size} height={size} viewBox="0 0 36 36">
         {segments.map((seg) => (
           <circle
             key={seg.label}
@@ -43,7 +43,7 @@ export default function DonutChart({ data, size = 160 }: DonutChartProps) {
             stroke={seg.color}
             strokeWidth="3"
             strokeDasharray={`${seg.length} ${circumference - seg.length}`}
-            strokeDashoffset={-seg.offset}
+            strokeDashoffset={-(seg.offset + circumference / 4)}
           />
         ))}
         <circle cx={cx} cy={cy} r="12" fill="#fff" />

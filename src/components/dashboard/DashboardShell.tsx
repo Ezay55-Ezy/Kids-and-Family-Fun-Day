@@ -185,7 +185,7 @@ export default function DashboardShell({ user, initialUnreadCount, vapidPublicKe
   return (
     <div className="min-h-screen bg-paper">
       <div
-        className={`fixed inset-0 z-30 bg-ink/50 backdrop-blur-sm transition-opacity lg:hidden ${
+        className={`fixed inset-0 z-30 bg-ink/50 transition-opacity lg:hidden ${
           sidebarOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={() => setSidebarOpen(false)}
