@@ -2,7 +2,11 @@ import { prisma } from '@/lib/prisma';
 import { formatDate, formatTime, formatCurrency } from '@/lib/format';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY ?? '');
+let resend: Resend;
+function getResend() {
+  if (!resend) resend = new Resend(process.env.RESEND_API_KEY);
+  return resend;
+}
 
 const FROM =
   process.env.EMAIL_FROM ?? 'onboarding@resend.dev';
@@ -208,7 +212,7 @@ export async function sendBookingConfirmationEmail(bookingId: string): Promise<v
       walletUrl,
     });
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: `${SENDER_NAME} <${FROM}>`,
       to: booking.user.email,
       subject: `Booking Confirmed — ${eventTitle}`,
@@ -252,7 +256,7 @@ export async function sendBookingCancellationEmail(bookingId: string): Promise<v
       bookingRef: booking.ticketCode,
     });
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: `${SENDER_NAME} <${FROM}>`,
       to: booking.user.email,
       subject: `Booking Cancelled — ${eventTitle}`,

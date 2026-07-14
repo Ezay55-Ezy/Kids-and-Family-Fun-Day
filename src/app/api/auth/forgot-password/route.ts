@@ -4,7 +4,11 @@ import { prisma } from '@/lib/prisma';
 import { forgotPasswordSchema } from '@/validators/auth.validator';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY ?? '');
+let resend: Resend;
+function getResend() {
+  if (!resend) resend = new Resend(process.env.RESEND_API_KEY);
+  return resend;
+}
 const FROM = process.env.EMAIL_FROM ?? 'onboarding@resend.dev';
 const SENDER_NAME = 'Kids & Family Fun Day Kenya';
 
@@ -53,7 +57,7 @@ export async function POST(request: Request) {
   const resetUrl = `${getBaseUrl()}/auth/reset-password?token=${token}`;
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: `${SENDER_NAME} <${FROM}>`,
       to: user.email,
       subject: 'Reset Your Password',
