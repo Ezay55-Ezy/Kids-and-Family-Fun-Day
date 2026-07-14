@@ -24,7 +24,7 @@ export default function EventCard({
   const isPast = new Date(endDate) < new Date();
 
   return (
-    <article className="group relative flex flex-col rounded-xl bg-paper border border-ink/10 shadow-soft overflow-hidden transition-all duration-300 hover:shadow-soft-lg hover:-translate-y-0.5">
+    <article className="group relative flex flex-col rounded-xl bg-paper border border-ink/10 shadow-soft overflow-hidden transition-shadow duration-300 hover:shadow-soft-lg lg:hover:-translate-y-0.5">
       <div className="relative aspect-[16/9] overflow-hidden bg-ink/5">
         {bannerImageUrl ? (
           <img

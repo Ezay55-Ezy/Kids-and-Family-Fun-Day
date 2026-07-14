@@ -102,7 +102,7 @@ export default async function AdminAnalyticsPage() {
       {/* Hero 4 */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Link href="/admin/events" className="contents">
-          <div className="rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg transition-shadow">
+          <div className="rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg lg:hover:-translate-y-0.5 transition-shadow">
             <div className="flex items-center gap-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-sky/10 text-sky ring-1 ring-sky/20">
                 <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -119,7 +119,7 @@ export default async function AdminAnalyticsPage() {
           </div>
         </Link>
 
-        <div className="rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg transition-shadow">
+        <div className="rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg lg:hover:-translate-y-0.5 transition-shadow">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-grass/10 text-grass ring-1 ring-grass/20">
               <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -138,7 +138,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         <Link href="/admin/vendors?status=ACTIVE" className="contents">
-          <div className="rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg transition-shadow">
+          <div className="rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg lg:hover:-translate-y-0.5 transition-shadow">
             <div className="flex items-center gap-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-sun/10 text-sun ring-1 ring-sun/20">
                 <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -155,7 +155,7 @@ export default async function AdminAnalyticsPage() {
           </div>
         </Link>
 
-        <div className="rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg transition-shadow">
+        <div className="rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg lg:hover:-translate-y-0.5 transition-shadow">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-coral/10 text-coral ring-1 ring-coral/20">
               <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -282,7 +282,7 @@ export default async function AdminAnalyticsPage() {
           <h2 className="font-display font-semibold text-lg text-ink">Quick Actions</h2>
           <Link
             href="/admin/events/new"
-            className="flex items-center gap-4 rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg transition-shadow"
+            className="flex items-center gap-4 rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg lg:hover:-translate-y-0.5 transition-shadow"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-coral/10 text-coral">
               <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -297,7 +297,7 @@ export default async function AdminAnalyticsPage() {
           </Link>
           <Link
             href="/admin/vendors?status=PENDING_REVIEW"
-            className="flex items-center gap-4 rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg transition-shadow"
+            className="flex items-center gap-4 rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg lg:hover:-translate-y-0.5 transition-shadow"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-sky/10 text-sky">
               <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -314,7 +314,7 @@ export default async function AdminAnalyticsPage() {
           </Link>
           <Link
             href="/admin"
-            className="flex items-center gap-4 rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg transition-shadow"
+            className="flex items-center gap-4 rounded-xl bg-paper border border-ink/10 shadow-soft p-5 hover:shadow-soft-lg lg:hover:-translate-y-0.5 transition-shadow"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-grass/10 text-grass">
               <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
