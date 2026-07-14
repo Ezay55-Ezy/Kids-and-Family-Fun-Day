@@ -37,19 +37,42 @@ export const authConfig: NextAuthConfig = {
 
     async authorized({ request, auth }) {
       const { pathname } = request.nextUrl;
+      const isLoggedIn = !!auth?.user;
       const isAuthPage = pathname === '/auth/login' || pathname === '/auth/register';
+      const isProtectedRoute =
+        pathname.startsWith('/admin') ||
+        pathname.startsWith('/vendor') ||
+        pathname.startsWith('/dashboard') ||
+        pathname.startsWith('/profile') ||
+        pathname.startsWith('/settings') ||
+        pathname.startsWith('/bookings') ||
+        pathname.startsWith('/payments');
 
-      if (!auth?.user) return true;
-      if (!isAuthPage) return true;
+      if (isProtectedRoute && !isLoggedIn) return false;
 
-      const role = auth.user.role;
-      if (role === 'ADMIN') {
-        return Response.redirect(new URL('/admin', request.nextUrl.origin));
+      if (isAuthPage && isLoggedIn) {
+        const role = auth!.user!.role;
+        if (role === 'ADMIN') {
+          return Response.redirect(new URL('/admin', request.nextUrl.origin));
+        }
+        if (role === 'VENDOR') {
+          return Response.redirect(new URL('/vendor', request.nextUrl.origin));
+        }
+        return Response.redirect(new URL('/dashboard', request.nextUrl.origin));
       }
-      if (role === 'VENDOR') {
-        return Response.redirect(new URL('/vendor', request.nextUrl.origin));
+
+      const role = auth?.user?.role;
+      if (pathname.startsWith('/admin') && role !== 'ADMIN') {
+        return Response.redirect(new URL(role === 'VENDOR' ? '/vendor' : '/dashboard', request.nextUrl.origin));
       }
-      return Response.redirect(new URL('/dashboard', request.nextUrl.origin));
+      if (pathname.startsWith('/vendor') && role !== 'VENDOR' && role !== 'ADMIN') {
+        return Response.redirect(new URL('/dashboard', request.nextUrl.origin));
+      }
+      if (pathname.startsWith('/dashboard') && (role === 'ADMIN' || role === 'VENDOR')) {
+        return Response.redirect(new URL(role === 'ADMIN' ? '/admin' : '/vendor', request.nextUrl.origin));
+      }
+
+      return true;
     },
   },
 };

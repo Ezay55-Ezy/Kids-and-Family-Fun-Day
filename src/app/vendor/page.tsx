@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { auth } from '@/auth';
 import { getVendorDashboard } from '@/services/vendor-service';
@@ -21,11 +20,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default async function VendorDashboardPage() {
   const session = await auth();
-  if (!session?.user?.id) {
-    redirect('/auth/login');
-  }
-
-  const data = await getVendorDashboard(session.user.id);
+  const data = await getVendorDashboard(session!.user!.id!);
 
   if (!data) {
     return (
