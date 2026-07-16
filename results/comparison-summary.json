@@ -1,0 +1,244 @@
+{
+    "metrics": {
+        "http_reqs": {
+            "count": 11245,
+            "rate": 31.051295179242945
+        },
+        "iteration_duration": {
+            "min": 1081.869831,
+            "med": 2616.622072,
+            "max": 4688.663847,
+            "p(90)": 3797.596783,
+            "p(95)": 3945.2334482,
+            "avg": 2607.7693135288614
+        },
+        "vus": {
+            "min": 1,
+            "max": 100,
+            "value": 1
+        },
+        "checks": {
+            "passes": 22490,
+            "fails": 0,
+            "value": 1
+        },
+        "vus_max": {
+            "value": 100,
+            "min": 100,
+            "max": 100
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 100.51424822463315,
+            "min": 77.045942,
+            "med": 91.863444,
+            "max": 1125.626284,
+            "p(90)": 118.21943900000001,
+            "p(95)": 141.61852119999998
+        },
+        "http_req_connecting": {
+            "med": 0,
+            "max": 1056.473318,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.37887602658959546,
+            "min": 0
+        },
+        "http_req_duration": {
+            "avg": 100.51424822463315,
+            "min": 77.045942,
+            "med": 91.863444,
+            "max": 1125.626284,
+            "p(90)": 118.21943900000001,
+            "p(95)": 141.61852119999998,
+            "thresholds": {
+                "p(95)<3000": false
+            }
+        },
+        "http_req_waiting": {
+            "p(95)": 128.9928674,
+            "avg": 95.29197828430387,
+            "min": 76.773936,
+            "med": 89.225297,
+            "max": 817.530794,
+            "p(90)": 110.79828140000001
+        },
+        "http_req_sending": {
+            "min": 0.025376,
+            "med": 0.075789,
+            "max": 4.867192,
+            "p(90)": 0.12391380000000002,
+            "p(95)": 0.15131139999999987,
+            "avg": 0.09015926758559341
+        },
+        "http_req_receiving": {
+            "max": 1014.951126,
+            "p(90)": 8.0299666,
+            "p(95)": 15.827109199999994,
+            "avg": 5.13211067274345,
+            "min": 0.025156,
+            "med": 0.55305
+        },
+        "http_req_blocked": {
+            "min": 0.000212,
+            "med": 0.000617,
+            "max": 1218.620213,
+            "p(90)": 0.001044,
+            "p(95)": 0.0012737999999999992,
+            "avg": 1.8576139727878944
+        },
+        "http_req_tls_handshaking": {
+            "min": 0,
+            "med": 0,
+            "max": 250.455613,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 1.4673987046687416
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 11245,
+            "thresholds": {
+                "rate<0.10": false
+            },
+            "value": 0
+        },
+        "data_sent": {
+            "count": 857245,
+            "rate": 2367.1469573970758
+        },
+        "iterations": {
+            "count": 11245,
+            "rate": 31.051295179242945
+        },
+        "data_received": {
+            "rate": 125487.52603230116,
+            "count": 45444392
+        },
+        "group_duration": {
+            "avg": 102.61916480240043,
+            "min": 77.363115,
+            "med": 92.176547,
+            "max": 1305.998255,
+            "p(90)": 121.51464180000002,
+            "p(95)": 148.45186179999993
+        }
+    },
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "Homepage": {
+                "path": "::Homepage",
+                "id": "cded41459867b5c9224144a4d6f189c4",
+                "groups": {},
+                "checks": {
+                        "Homepage status 200": {
+                            "fails": 0,
+                            "name": "Homepage status 200",
+                            "path": "::Homepage::Homepage status 200",
+                            "id": "e291a2b03f3b369f1a265dc0017722d9",
+                            "passes": 2270
+                        },
+                        "Homepage < 3s": {
+                            "passes": 2270,
+                            "fails": 0,
+                            "name": "Homepage < 3s",
+                            "path": "::Homepage::Homepage < 3s",
+                            "id": "4b673a89a3577f4e9801fdf0eb73d38b"
+                        }
+                    },
+                "name": "Homepage"
+            },
+            "Events Page": {
+                "path": "::Events Page",
+                "id": "cff76182f11fb602226d35fff3169a47",
+                "groups": {},
+                "checks": {
+                        "Events Page status 200": {
+                            "path": "::Events Page::Events Page status 200",
+                            "id": "de5113e5887c6fba10645b9ef30a0ad8",
+                            "passes": 2247,
+                            "fails": 0,
+                            "name": "Events Page status 200"
+                        },
+                        "Events Page < 3s": {
+                            "fails": 0,
+                            "name": "Events Page < 3s",
+                            "path": "::Events Page::Events Page < 3s",
+                            "id": "29d2841ea32a7207ea3c49a641cdc882",
+                            "passes": 2247
+                        }
+                    },
+                "name": "Events Page"
+            },
+            "Gallery API": {
+                "name": "Gallery API",
+                "path": "::Gallery API",
+                "id": "b5e720cad505f31ed09744a65a69f474",
+                "groups": {},
+                "checks": {
+                        "Gallery API status 200": {
+                            "fails": 0,
+                            "name": "Gallery API status 200",
+                            "path": "::Gallery API::Gallery API status 200",
+                            "id": "25caa75c99848b46103ee4f55d7c6f91",
+                            "passes": 2265
+                        },
+                        "Gallery API < 2s": {
+                            "id": "436fa8caaa019956d31da1ad7fd0fcb6",
+                            "passes": 2265,
+                            "fails": 0,
+                            "name": "Gallery API < 2s",
+                            "path": "::Gallery API::Gallery API < 2s"
+                        }
+                    }
+            },
+            "Vendor Marketplace": {
+                "checks": {
+                    "Vendor Marketplace status 200": {
+                        "name": "Vendor Marketplace status 200",
+                        "path": "::Vendor Marketplace::Vendor Marketplace status 200",
+                        "id": "5032db3ef3c00ee6ae25ffefa727b93d",
+                        "passes": 2196,
+                        "fails": 0
+                    },
+                    "Vendor Marketplace < 2s": {
+                        "path": "::Vendor Marketplace::Vendor Marketplace < 2s",
+                        "id": "d706fe7d6ef5cda4044b50a55075180c",
+                        "passes": 2196,
+                        "fails": 0,
+                        "name": "Vendor Marketplace < 2s"
+                    }
+                },
+                "name": "Vendor Marketplace",
+                "path": "::Vendor Marketplace",
+                "id": "c15d19da612defc3d8e3719170cf5b9b",
+                "groups": {}
+            },
+            "Events API": {
+                "path": "::Events API",
+                "id": "0a381367d50185c46dc8d1c440cb4b4e",
+                "groups": {},
+                "checks": {
+                        "Events API status 200": {
+                            "name": "Events API status 200",
+                            "path": "::Events API::Events API status 200",
+                            "id": "32d20c933491d52a906e74e4d3eb547a",
+                            "passes": 2267,
+                            "fails": 0
+                        },
+                        "Events API < 2s": {
+                            "name": "Events API < 2s",
+                            "path": "::Events API::Events API < 2s",
+                            "id": "cb4fbc126ffc877992a225e645e67712",
+                            "passes": 2267,
+                            "fails": 0
+                        }
+                    },
+                "name": "Events API"
+            }
+        },
+        "checks": {}
+    }
+}
