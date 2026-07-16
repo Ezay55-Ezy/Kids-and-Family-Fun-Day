@@ -10,13 +10,17 @@ export async function GET(request: Request) {
   try { await requireAdmin(session.user.id); } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
 
   const { searchParams } = new URL(request.url);
-  const filters = userFilterSchema.parse({
+  const parsed = userFilterSchema.safeParse({
     query: searchParams.get('query') || undefined,
     role: searchParams.get('role') || 'ALL',
     status: searchParams.get('status') || 'ALL',
     page: searchParams.get('page') || 1,
     limit: searchParams.get('limit') || 10,
   });
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid filters', details: parsed.error.flatten() }, { status: 400 });
+  }
+  const filters = parsed.data;
 
   const [result, stats] = await Promise.all([
     listUsers(filters),

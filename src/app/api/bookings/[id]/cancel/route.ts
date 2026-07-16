@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
+import { prisma } from '@/lib/prisma';
 import {
   cancelBooking,
   BookingNotFoundError,
@@ -24,13 +25,22 @@ export async function POST(
   try {
     const booking = await cancelBooking(session.user.id, id);
 
-    sendBookingCancellationEmail(booking.id).catch((err) =>
+    const fullBooking = await prisma.booking.findUnique({
+      where: { id: booking.id },
+      include: {
+        user: { select: { name: true, email: true } },
+        event: { select: { title: true, startDate: true, endDate: true, location: true } },
+        items: { include: { ticketType: { select: { name: true, price: true } } } },
+      },
+    });
+
+    sendBookingCancellationEmail(booking.id, fullBooking ?? undefined).catch((err) =>
       console.error('[EMAIL] Fire-and-forget cancellation failed:', err),
     );
-    createBookingCancellationNotification(booking.id).catch((err) =>
+    createBookingCancellationNotification(booking.id, fullBooking ?? undefined).catch((err) =>
       console.error('[NOTIFICATION] Fire-and-forget cancellation failed:', err),
     );
-    sendBookingCancellationPush(booking.id).catch((err) =>
+    sendBookingCancellationPush(booking.id, fullBooking ?? undefined).catch((err) =>
       console.error('[PUSH] Fire-and-forget cancellation failed:', err),
     );
 

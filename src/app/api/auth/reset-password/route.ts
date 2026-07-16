@@ -1,9 +1,20 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { resetPasswordSchema } from '@/validators/auth.validator';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: Request) {
+  const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown';
+  const rateLimit = await checkRateLimit(`reset-password:${ip}`, 5, 60_000);
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil(rateLimit.retryAfterMs / 1000)) } },
+    );
+  }
+
   const body = await request.json();
   const parsed = resetPasswordSchema.safeParse(body);
 
@@ -15,9 +26,10 @@ export async function POST(request: Request) {
   }
 
   const { token, password } = parsed.data;
+  const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
 
   const user = await prisma.user.findUnique({
-    where: { passwordResetToken: token },
+    where: { passwordResetToken: tokenHash },
     select: { id: true, passwordResetExpiry: true },
   });
 

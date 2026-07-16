@@ -4,7 +4,7 @@ import { formatDate, formatTime } from '@/lib/format';
 import MobileMenu from '@/components/home/MobileMenu';
 import HomeNewsletter from '@/components/home/HomeNewsletter';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function HomePage() {
   const now = new Date();

@@ -23,7 +23,11 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sp
 
   const { sponsorId } = await params;
   const body = await request.json();
-  const data = sponsorUpdateSchema.parse(body);
+  const parsed = sponsorUpdateSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid request body', details: parsed.error.flatten() }, { status: 400 });
+  }
+  const data = parsed.data;
 
   try {
     const sponsor = await updateSponsor(sponsorId, data);

@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const galleryImageSchema = z.object({
   title: z.string().trim().max(200).optional().or(z.literal('')),
   description: z.string().trim().max(1000).optional().or(z.literal('')),
-  imageUrl: z.string().min(1, 'Image URL is required'),
+  imageUrl: z.string().url('Must be a valid URL').min(1, 'Image URL is required'),
   caption: z.string().trim().max(300).optional().or(z.literal('')),
   eventId: z.string().optional().or(z.literal('')),
   displayOrder: z.coerce.number().int().min(0).default(0),

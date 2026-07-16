@@ -23,7 +23,11 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ us
 
   const { userId } = await params;
   const body = await request.json();
-  const data = userUpdateSchema.parse(body);
+  const parsed = userUpdateSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid request body', details: parsed.error.flatten() }, { status: 400 });
+  }
+  const data = parsed.data;
 
   try {
     const user = await updateUser(userId, data);

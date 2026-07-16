@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
+import { prisma } from '@/lib/prisma';
 import { bookingSchema } from '@/validators/booking.validator';
 import {
   createBooking,
@@ -33,13 +34,22 @@ export async function POST(request: Request) {
       items: parsed.data.items,
     });
 
-    sendBookingConfirmationEmail(booking.id).catch((err) =>
+    const fullBooking = await prisma.booking.findUnique({
+      where: { id: booking.id },
+      include: {
+        user: { select: { name: true, email: true } },
+        event: { select: { title: true, startDate: true, endDate: true, location: true } },
+        items: { include: { ticketType: { select: { name: true, price: true } } } },
+      },
+    });
+
+    sendBookingConfirmationEmail(booking.id, fullBooking ?? undefined).catch((err) =>
       console.error('[EMAIL] Fire-and-forget confirmation failed:', err),
     );
-    createBookingConfirmationNotification(booking.id).catch((err) =>
+    createBookingConfirmationNotification(booking.id, fullBooking ?? undefined).catch((err) =>
       console.error('[NOTIFICATION] Fire-and-forget confirmation failed:', err),
     );
-    sendBookingConfirmationPush(booking.id).catch((err) =>
+    sendBookingConfirmationPush(booking.id, fullBooking ?? undefined).catch((err) =>
       console.error('[PUSH] Fire-and-forget confirmation failed:', err),
     );
 

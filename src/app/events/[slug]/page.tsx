@@ -93,10 +93,11 @@ export default async function EventDetailPage(props: { params: Params }) {
   const event = await getPublishedEventBySlug(slug).catch(() => null);
   if (!event) notFound();
 
-  const session = await auth();
+  const [session, relatedEvents] = await Promise.all([
+    auth(),
+    listRelatedEvents(event.id, 3),
+  ]);
   const userId = session?.user?.id;
-
-  const relatedEvents = await listRelatedEvents(event.id, 3);
 
   const isPast = new Date(event.endDate) < new Date();
   const hasRegistrationDates = event.registrationOpenDate || event.registrationCloseDate;

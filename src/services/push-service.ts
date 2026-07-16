@@ -96,9 +96,9 @@ export async function sendPushNotification(
   }
 }
 
-export async function sendBookingConfirmationPush(bookingId: string): Promise<void> {
+export async function sendBookingConfirmationPush(bookingId: string, preFetched?: { userId: string; event: { title: string } | null } | null): Promise<void> {
   try {
-    const booking = await prisma.booking.findUnique({
+    const booking = preFetched ?? await prisma.booking.findUnique({
       where: { id: bookingId },
       include: { event: { select: { title: true } } },
     });
@@ -116,9 +116,9 @@ export async function sendBookingConfirmationPush(bookingId: string): Promise<vo
   }
 }
 
-export async function sendBookingCancellationPush(bookingId: string): Promise<void> {
+export async function sendBookingCancellationPush(bookingId: string, preFetched?: { userId: string; event: { title: string } | null } | null): Promise<void> {
   try {
-    const booking = await prisma.booking.findUnique({
+    const booking = preFetched ?? await prisma.booking.findUnique({
       where: { id: bookingId },
       include: { event: { select: { title: true } } },
     });

@@ -2,6 +2,22 @@ import { prisma } from '@/lib/prisma';
 import { formatDate, formatTime, formatCurrency } from '@/lib/format';
 import { Resend } from 'resend';
 
+type ConfirmationBookingData = {
+  userId: string;
+  ticketCode: string;
+  totalAmount: { toString(): string };
+  user: { name: string | null; email: string | null };
+  event: { title: string; startDate: Date; endDate: Date | null; location: string | null } | null;
+  items: { ticketType: { name: string; price: { toString(): string } }; quantity: number; unitPrice: { toString(): string }; subtotal: { toString(): string } }[];
+};
+
+type CancellationBookingData = {
+  userId: string;
+  ticketCode: string;
+  user: { name: string | null; email: string | null };
+  event: { title: string; startDate: Date } | null;
+};
+
 let resend: Resend;
 function getResend() {
   if (!resend) resend = new Resend(process.env.RESEND_API_KEY);
@@ -20,6 +36,15 @@ function getBaseUrl(): string {
   );
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function confirmationHtml(opts: {
   userName: string;
   eventTitle: string;
@@ -34,10 +59,10 @@ function confirmationHtml(opts: {
     .map(
       (item) => `
         <tr>
-          <td style="padding: 8px 12px; border-bottom: 1px solid #E7E5E4;">${item.name}</td>
+          <td style="padding: 8px 12px; border-bottom: 1px solid #E7E5E4;">${escapeHtml(item.name)}</td>
           <td style="padding: 8px 12px; border-bottom: 1px solid #E7E5E4; text-align: center;">${item.qty}</td>
-          <td style="padding: 8px 12px; border-bottom: 1px solid #E7E5E4; text-align: right;">${item.unitPrice}</td>
-          <td style="padding: 8px 12px; border-bottom: 1px solid #E7E5E4; text-align: right;">${item.subtotal}</td>
+          <td style="padding: 8px 12px; border-bottom: 1px solid #E7E5E4; text-align: right;">${escapeHtml(item.unitPrice)}</td>
+          <td style="padding: 8px 12px; border-bottom: 1px solid #E7E5E4; text-align: right;">${escapeHtml(item.subtotal)}</td>
         </tr>`,
     )
     .join('');
@@ -59,14 +84,14 @@ function confirmationHtml(opts: {
         </tr>
         <!-- Body -->
         <tr><td style="padding:32px;color:#292524;">
-          <p style="margin:0 0 4px;font-size:16px;">Hi ${opts.userName},</p>
+          <p style="margin:0 0 4px;font-size:16px;">Hi ${escapeHtml(opts.userName)},</p>
           <p style="margin:0 0 20px;font-size:14px;color:#57534E;">Your booking has been confirmed. Here are the details:</p>
 
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr><td style="padding:4px 0;font-size:14px;"><strong>Event:</strong></td><td style="padding:4px 0;font-size:14px;">${opts.eventTitle}</td></tr>
-            <tr><td style="padding:4px 0;font-size:14px;"><strong>Date:</strong></td><td style="padding:4px 0;font-size:14px;">${opts.eventDate}</td></tr>
-            <tr><td style="padding:4px 0;font-size:14px;"><strong>Time:</strong></td><td style="padding:4px 0;font-size:14px;">${opts.eventTime}</td></tr>
-            <tr><td style="padding:4px 0;font-size:14px;"><strong>Venue:</strong></td><td style="padding:4px 0;font-size:14px;">${opts.eventLocation}</td></tr>
+            <tr><td style="padding:4px 0;font-size:14px;"><strong>Event:</strong></td><td style="padding:4px 0;font-size:14px;">${escapeHtml(opts.eventTitle)}</td></tr>
+            <tr><td style="padding:4px 0;font-size:14px;"><strong>Date:</strong></td><td style="padding:4px 0;font-size:14px;">${escapeHtml(opts.eventDate)}</td></tr>
+            <tr><td style="padding:4px 0;font-size:14px;"><strong>Time:</strong></td><td style="padding:4px 0;font-size:14px;">${escapeHtml(opts.eventTime)}</td></tr>
+            <tr><td style="padding:4px 0;font-size:14px;"><strong>Venue:</strong></td><td style="padding:4px 0;font-size:14px;">${escapeHtml(opts.eventLocation)}</td></tr>
           </table>
 
           <h2 style="margin:24px 0 8px;font-size:15px;font-weight:600;color:#292524;">Tickets</h2>
@@ -84,7 +109,7 @@ function confirmationHtml(opts: {
             </tbody>
           </table>
 
-          <p style="margin:16px 0 24px;text-align:right;font-size:16px;font-weight:700;color:#292524;">Total: ${opts.totalAmount}</p>
+          <p style="margin:16px 0 24px;text-align:right;font-size:16px;font-weight:700;color:#292524;">Total: ${escapeHtml(opts.totalAmount)}</p>
 
           <p style="margin:0 0 8px;font-size:14px;color:#57534E;">
             View your tickets and manage your booking in your
@@ -132,15 +157,15 @@ function cancellationHtml(opts: {
         </tr>
         <!-- Body -->
         <tr><td style="padding:32px;color:#292524;">
-          <p style="margin:0 0 4px;font-size:16px;">Hi ${opts.userName},</p>
+          <p style="margin:0 0 4px;font-size:16px;">Hi ${escapeHtml(opts.userName)},</p>
           <p style="margin:0 0 20px;font-size:14px;color:#57534E;">
-            Your booking for <strong>${opts.eventTitle}</strong> has been cancelled as requested.
+            Your booking for <strong>${escapeHtml(opts.eventTitle)}</strong> has been cancelled as requested.
           </p>
 
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr><td style="padding:4px 0;font-size:14px;"><strong>Event:</strong></td><td style="padding:4px 0;font-size:14px;">${opts.eventTitle}</td></tr>
-            <tr><td style="padding:4px 0;font-size:14px;"><strong>Date:</strong></td><td style="padding:4px 0;font-size:14px;">${opts.eventDate}</td></tr>
-            <tr><td style="padding:4px 0;font-size:14px;"><strong>Reference:</strong></td><td style="padding:4px 0;font-size:14px;">${opts.bookingRef}</td></tr>
+            <tr><td style="padding:4px 0;font-size:14px;"><strong>Event:</strong></td><td style="padding:4px 0;font-size:14px;">${escapeHtml(opts.eventTitle)}</td></tr>
+            <tr><td style="padding:4px 0;font-size:14px;"><strong>Date:</strong></td><td style="padding:4px 0;font-size:14px;">${escapeHtml(opts.eventDate)}</td></tr>
+            <tr><td style="padding:4px 0;font-size:14px;"><strong>Reference:</strong></td><td style="padding:4px 0;font-size:14px;">${escapeHtml(opts.bookingRef)}</td></tr>
           </table>
 
           <p style="margin:20px 0 0;font-size:14px;color:#57534E;">
@@ -162,9 +187,9 @@ function cancellationHtml(opts: {
 </html>`;
 }
 
-export async function sendBookingConfirmationEmail(bookingId: string): Promise<void> {
+export async function sendBookingConfirmationEmail(bookingId: string, preFetched?: ConfirmationBookingData | null): Promise<void> {
   try {
-    const booking = await prisma.booking.findUnique({
+    const booking = preFetched ?? await prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
         user: { select: { name: true, email: true } },
@@ -227,9 +252,9 @@ export async function sendBookingConfirmationEmail(bookingId: string): Promise<v
   }
 }
 
-export async function sendBookingCancellationEmail(bookingId: string): Promise<void> {
+export async function sendBookingCancellationEmail(bookingId: string, preFetched?: CancellationBookingData | null): Promise<void> {
   try {
-    const booking = await prisma.booking.findUnique({
+    const booking = preFetched ?? await prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
         user: { select: { name: true, email: true } },

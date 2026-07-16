@@ -19,7 +19,11 @@ export async function POST(request: Request) {
   try { await requireAdmin(session.user.id); } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
 
   const body = await request.json();
-  const data = reportExportSchema.parse(body);
+  const parsed = reportExportSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid request body', details: parsed.error.flatten() }, { status: 400 });
+  }
+  const data = parsed.data;
 
   const filters = {
     type: data.type,

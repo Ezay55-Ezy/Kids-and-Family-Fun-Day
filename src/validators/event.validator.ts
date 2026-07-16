@@ -15,7 +15,7 @@ export const eventSchema = z.object({
   endDate: z.string().min(1, 'End date is required'),
   endTime: z.string().optional().or(z.literal('')),
   location: z.string().trim().min(3, 'Location is required').max(500),
-  bannerImageUrl: z.string().optional().or(z.literal('')),
+  bannerImageUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   capacity: z.coerce.number().int().positive('Capacity must be a positive number'),
   registrationOpenDate: z.string().optional().or(z.literal('')),
   registrationCloseDate: z.string().optional().or(z.literal('')),

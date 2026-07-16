@@ -11,7 +11,11 @@ export async function GET(request: Request) {
 
   try {
     const result = await listMarketplaceVendors({ search, category, sort, page, limit });
-    return NextResponse.json(result);
+    return NextResponse.json(result, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+      },
+    });
   } catch (error) {
     console.error('[MARKETPLACE_LIST_ERROR]', error);
     return NextResponse.json(

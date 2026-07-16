@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { prisma } from '@/lib/prisma';
 import { forgotPasswordSchema } from '@/validators/auth.validator';
 import { Resend } from 'resend';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 let resend: Resend;
 function getResend() {
@@ -21,6 +22,15 @@ function getBaseUrl(): string {
 }
 
 export async function POST(request: Request) {
+  const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown';
+  const rateLimit = await checkRateLimit(`forgot-password:${ip}`, 3, 60_000);
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil(rateLimit.retryAfterMs / 1000)) } },
+    );
+  }
+
   const body = await request.json();
   const parsed = forgotPasswordSchema.safeParse(body);
 
@@ -43,18 +53,19 @@ export async function POST(request: Request) {
     });
   }
 
-  const token = crypto.randomBytes(32).toString('hex');
+  const rawToken = crypto.randomBytes(32).toString('hex');
+  const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
   const expiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
   await prisma.user.update({
     where: { id: user.id },
     data: {
-      passwordResetToken: token,
+      passwordResetToken: tokenHash,
       passwordResetExpiry: expiry,
     },
   });
 
-  const resetUrl = `${getBaseUrl()}/auth/reset-password?token=${token}`;
+  const resetUrl = `${getBaseUrl()}/auth/reset-password?token=${rawToken}`;
 
   try {
     await getResend().emails.send({

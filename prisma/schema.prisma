@@ -16,7 +16,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // -----------------------------------------------------------------
@@ -141,8 +140,6 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([role])
 }
 
 // -----------------------------------------------------------------
@@ -198,6 +195,7 @@ model Event {
   @@index([status])
   @@index([startDate])
   @@index([categoryId])
+  @@index([createdById])
 }
 
 // -----------------------------------------------------------------
@@ -286,6 +284,7 @@ model Payment {
   updatedAt DateTime @updatedAt
 
   @@index([status])
+  @@index([bookingId])
 }
 
 // -----------------------------------------------------------------
@@ -373,6 +372,7 @@ model Booking {
   @@index([status])
   @@index([vendorId])
   @@index([userId])
+  @@index([eventId])
 }
 
 // -----------------------------------------------------------------
@@ -454,6 +454,7 @@ model Review {
   @@index([eventId])
   @@index([status])
   @@unique([userId, eventId]) // one review per user per event
+  @@index([userId])
 }
 
 model Notification {
@@ -491,4 +492,7 @@ model NewsletterSubscriber {
   email     String   @unique
   subscribedAt DateTime @default(now())
   isActive  Boolean  @default(true)
+
+  @@index([isActive])
+  @@index([subscribedAt])
 }

@@ -68,8 +68,10 @@ export function formatRelativeTime(date: Date | string): string {
 
 export function escapeCsvField(value: unknown): string {
   const str = String(value ?? '');
-  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-    return `"${str.replace(/"/g, '""')}"`;
+  // Strip leading characters that trigger formula execution in spreadsheet apps
+  const sanitized = str.replace(/^[\t\r\n=+\-@]/, '');
+  if (sanitized.includes(',') || sanitized.includes('"') || sanitized.includes('\n')) {
+    return `"${sanitized.replace(/"/g, '""')}"`;
   }
-  return str;
+  return sanitized;
 }

@@ -144,24 +144,31 @@ export async function togglePublishGalleryImage(id: string) {
   });
 }
 
-export async function getPublishedGalleryImages(eventId?: string) {
+export async function getPublishedGalleryImages(eventId?: string, limit = 30, offset = 0) {
   const where: Record<string, unknown> = { isPublished: true };
   if (eventId) where.eventId = eventId;
 
-  return prisma.gallery.findMany({
-    where,
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      imageUrl: true,
-      caption: true,
-      displayOrder: true,
-      createdAt: true,
-      event: { select: { id: true, title: true, slug: true } },
-    },
-    orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
-  });
+  const [images, total] = await Promise.all([
+    prisma.gallery.findMany({
+      where,
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        imageUrl: true,
+        caption: true,
+        displayOrder: true,
+        createdAt: true,
+        event: { select: { id: true, title: true, slug: true } },
+      },
+      orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+      take: limit,
+      skip: offset,
+    }),
+    prisma.gallery.count({ where }),
+  ]);
+
+  return { images, total, limit, offset };
 }
 
 export async function getGalleryStats() {

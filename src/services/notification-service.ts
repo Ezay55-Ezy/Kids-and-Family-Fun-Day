@@ -36,9 +36,9 @@ export async function createNotification(
   });
 }
 
-export async function createBookingConfirmationNotification(bookingId: string): Promise<void> {
+export async function createBookingConfirmationNotification(bookingId: string, preFetched?: { userId: string; event: { title: string } | null } | null): Promise<void> {
   try {
-    const booking = await prisma.booking.findUnique({
+    const booking = preFetched ?? await prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
         event: { select: { title: true } },
@@ -60,9 +60,9 @@ export async function createBookingConfirmationNotification(bookingId: string): 
   }
 }
 
-export async function createBookingCancellationNotification(bookingId: string): Promise<void> {
+export async function createBookingCancellationNotification(bookingId: string, preFetched?: { userId: string; event: { title: string } | null } | null): Promise<void> {
   try {
-    const booking = await prisma.booking.findUnique({
+    const booking = preFetched ?? await prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
         event: { select: { title: true } },

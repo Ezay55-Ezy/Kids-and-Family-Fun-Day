@@ -8,6 +8,12 @@ const redis = process.env.UPSTASH_REDIS_REST_URL
     })
   : null;
 
+if (!redis) {
+  console.warn(
+    '[RATE-LIMIT] UPSTASH_REDIS_REST_URL not set. Using in-memory rate limiter as fallback. Rate limits will NOT persist across server restarts.',
+  );
+}
+
 const limiters = new Map<string, Ratelimit>();
 
 function getLimiter(key: string, maxRequests: number, windowMs: number): Ratelimit {
@@ -24,13 +30,32 @@ function getLimiter(key: string, maxRequests: number, windowMs: number): Ratelim
   return limiter;
 }
 
+// In-memory sliding window fallback when Redis is unavailable
+const memoryStore = new Map<string, { timestamps: number[] }>();
+
+function checkMemoryRateLimit(key: string, maxRequests: number, windowMs: number): { allowed: boolean; retryAfterMs: number } {
+  const now = Date.now();
+  const entry = memoryStore.get(key) ?? { timestamps: [] };
+  entry.timestamps = entry.timestamps.filter((t) => now - t < windowMs);
+
+  if (entry.timestamps.length >= maxRequests) {
+    const oldest = entry.timestamps[0]!;
+    const retryAfterMs = windowMs - (now - oldest);
+    return { allowed: false, retryAfterMs };
+  }
+
+  entry.timestamps.push(now);
+  memoryStore.set(key, entry);
+  return { allowed: true, retryAfterMs: 0 };
+}
+
 export async function checkRateLimit(
   key: string,
   maxRequests: number = 10,
   windowMs: number = 60_000,
 ): Promise<{ allowed: boolean; retryAfterMs: number }> {
   if (!redis) {
-    return { allowed: true, retryAfterMs: 0 };
+    return checkMemoryRateLimit(key, maxRequests, windowMs);
   }
 
   const limiter = getLimiter(key, maxRequests, windowMs);

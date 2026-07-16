@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   try { await requireAdmin(session.user.id); } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
 
   const { searchParams } = new URL(request.url);
-  const filters = reportFilterSchema.parse({
+  const parsed = reportFilterSchema.safeParse({
     type: searchParams.get('type') || 'events',
     query: searchParams.get('query') || undefined,
     status: searchParams.get('status') || undefined,
@@ -22,6 +22,10 @@ export async function GET(request: Request) {
     page: searchParams.get('page') || 1,
     limit: searchParams.get('limit') || 20,
   });
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid filters', details: parsed.error.flatten() }, { status: 400 });
+  }
+  const filters = parsed.data;
 
   switch (filters.type) {
     case 'events':

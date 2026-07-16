@@ -10,13 +10,17 @@ export async function GET(request: Request) {
   try { await requireAdmin(session.user.id); } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
 
   const { searchParams } = new URL(request.url);
-  const filters = sponsorFilterSchema.parse({
+  const parsed = sponsorFilterSchema.safeParse({
     query: searchParams.get('query') || undefined,
     tier: searchParams.get('tier') || 'ALL',
     status: searchParams.get('status') || 'ALL',
     page: searchParams.get('page') || 1,
     limit: searchParams.get('limit') || 10,
   });
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid filters', details: parsed.error.flatten() }, { status: 400 });
+  }
+  const filters = parsed.data;
 
   const [result, stats] = await Promise.all([
     listSponsors(filters),
@@ -32,7 +36,11 @@ export async function POST(request: Request) {
   try { await requireAdmin(session.user.id); } catch { return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); }
 
   const body = await request.json();
-  const data = sponsorSchema.parse(body);
+  const parsed = sponsorSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Invalid request body', details: parsed.error.flatten() }, { status: 400 });
+  }
+  const data = parsed.data;
 
   try {
     const sponsor = await createSponsor(data);
