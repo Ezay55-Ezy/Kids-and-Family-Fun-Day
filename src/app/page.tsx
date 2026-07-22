@@ -138,6 +138,7 @@ export default async function HomePage() {
               { label: 'Home', href: '/' },
               { label: 'Events', href: '/events' },
               { label: 'Vendors', href: '/vendors' },
+              { label: 'Sponsors', href: '/sponsors' },
               { label: 'Gallery', href: '/gallery' },
             ].map((link) => (
               <Link
@@ -171,93 +172,93 @@ export default async function HomePage() {
 
       <main>
         {/* ─── Hero ─── */}
-        <section className="relative bg-[#FAF9F6]">
-          <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-20 md:py-28 lg:py-32">
-            <div className="max-w-2xl">
-              {upcomingEvents.length > 0 && (
-                <div className="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-3.5 py-1 text-sm font-medium text-teal-800 mb-6">
-                  <span className="h-1.5 w-1.5 rounded-full bg-teal-600 animate-pulse" />
-                  {upcomingEvents.length} upcoming event{upcomingEvents.length > 1 ? 's' : ''} — book now
+        <section className="bg-[#FAF9F6]">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-12 sm:pt-16 pb-12 text-center">
+            {upcomingEvents.length > 0 && (
+              <div className="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-3.5 py-1 text-sm font-medium text-teal-800 mb-6">
+                <span className="h-1.5 w-1.5 rounded-full bg-teal-600 animate-pulse" />
+                {upcomingEvents.length} upcoming event{upcomingEvents.length > 1 ? 's' : ''} — book now
+              </div>
+            )}
+
+            <h1 className="font-display text-4xl sm:text-5xl md:text-[3.5rem] font-extrabold leading-[1.08] tracking-tight text-slate-900">
+              Creating Smiles,
+              <br />
+              Building Families,
+              <br />
+              <span className="text-teal-800">Growing Businesses</span>
+            </h1>
+
+            <p className="mt-5 text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl mx-auto">
+              Discover curated outdoor events, book tickets with M-Pesa, and
+              create unforgettable memories with your loved ones.
+            </p>
+
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link
+                href="/events"
+                className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-7 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-800 active:scale-[0.98] transition-all duration-200"
+              >
+                Browse Events
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+
+            <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm text-slate-500">
+              {reviewCount > 0 && (
+                <div className="flex items-center gap-1.5">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <svg
+                        key={i}
+                        className={`h-4 w-4 ${
+                          i < Math.round(avgRating) ? 'text-amber-400' : 'text-slate-200'
+                        }`}
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <span>
+                    <span className="font-semibold text-slate-700">{avgRating.toFixed(1)}</span>{' '}
+                    from {reviewCount} famil{reviewCount === 1 ? 'y' : 'ies'}
+                  </span>
                 </div>
               )}
-
-              <h1 className="font-display text-4xl sm:text-5xl md:text-[3.5rem] font-extrabold leading-[1.08] tracking-tight text-slate-900">
-                Make Family
-                <br />
-                <span className="text-teal-800">Moments Matter</span>
-              </h1>
-
-              <p className="mt-5 text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
-                Discover curated outdoor events, book tickets with M-Pesa, and
-                create unforgettable memories with your loved ones.
-              </p>
-
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Link
-                  href="/events"
-                  className="inline-flex items-center gap-2 rounded-lg bg-teal-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-800 active:scale-[0.98] transition-all duration-200"
-                >
-                  Browse Events
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </Link>
+              <div className="flex items-center gap-1.5">
+                <svg className="h-4 w-4 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                Secure M-Pesa checkout
               </div>
-
-              <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2.5 text-sm text-slate-500">
-                {reviewCount > 0 && (
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <svg
-                          key={i}
-                          className={`h-4 w-4 ${
-                            i < Math.round(avgRating) ? 'text-amber-400' : 'text-slate-200'
-                          }`}
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                        >
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <span>
-                      <span className="font-semibold text-slate-700">{avgRating.toFixed(1)}</span>{' '}
-                      from {reviewCount} famil{reviewCount === 1 ? 'y' : 'ies'}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center gap-1.5">
-                  <svg className="h-4 w-4 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                  Secure M-Pesa checkout
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <svg className="h-4 w-4 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                  Instant QR tickets, no queues
-                </div>
+              <div className="flex items-center gap-1.5">
+                <svg className="h-4 w-4 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                Instant QR tickets, no queues
               </div>
+            </div>
 
-              <div className="mt-8 flex gap-8 border-t border-slate-200 pt-6">
-                <div>
-                  <span className="font-display text-2xl font-extrabold tracking-tight text-slate-900">
-                    {eventCount}
-                  </span>
-                  <span className="ml-1.5 text-sm text-slate-500">
-                    Active Event{eventCount !== 1 ? 's' : ''}
-                  </span>
-                </div>
-                <div>
-                  <span className="font-display text-2xl font-extrabold tracking-tight text-slate-900">
-                    {vendorCount}
-                  </span>
-                  <span className="ml-1.5 text-sm text-slate-500">
-                    Trusted Vendor{vendorCount !== 1 ? 's' : ''}
-                  </span>
-                </div>
+            <div className="mt-8 flex justify-center gap-8 border-t border-slate-200 pt-6">
+              <div>
+                <span className="font-display text-2xl font-extrabold tracking-tight text-slate-900">
+                  {eventCount}
+                </span>
+                <span className="ml-1.5 text-sm text-slate-500">
+                  Active Event{eventCount !== 1 ? 's' : ''}
+                </span>
+              </div>
+              <div>
+                <span className="font-display text-2xl font-extrabold tracking-tight text-slate-900">
+                  {vendorCount}
+                </span>
+                <span className="ml-1.5 text-sm text-slate-500">
+                  Trusted Vendor{vendorCount !== 1 ? 's' : ''}
+                </span>
               </div>
             </div>
           </div>
@@ -666,8 +667,17 @@ export default async function HomePage() {
 
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-5">
               {sponsors.map((sponsor) => {
+                const tierStyle =
+                  sponsor.tier === 'PLATINUM'
+                    ? 'border-purple-200 bg-purple-50/40 hover:border-purple-300'
+                    : sponsor.tier === 'GOLD'
+                      ? 'border-amber-200 bg-amber-50/40 hover:border-amber-300'
+                      : sponsor.tier === 'SILVER'
+                        ? 'border-slate-200 bg-slate-50/40 hover:border-slate-300'
+                        : 'border-slate-200 bg-white hover:border-slate-300';
+
                 const sponsorLogo = (
-                  <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-5 py-3 hover:border-slate-300 transition-colors">
+                  <div className={`flex items-center gap-3 rounded-lg border px-5 py-3 transition-colors ${tierStyle}`}>
                     {sponsor.logoUrl ? (
                       <img
                         src={sponsor.logoUrl}
@@ -695,6 +705,18 @@ export default async function HomePage() {
                   <div key={sponsor.id}>{sponsorLogo}</div>
                 );
               })}
+            </div>
+
+            <div className="mt-8 text-center">
+              <Link
+                href="/sponsors"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+              >
+                View All Sponsors
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
             </div>
           </section>
         )}

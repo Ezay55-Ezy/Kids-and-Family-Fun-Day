@@ -208,6 +208,55 @@ export async function getPublishedSponsors() {
   });
 }
 
+export async function linkSponsorToEvent(sponsorId: string, eventId: string) {
+  const [sponsor, event] = await Promise.all([
+    prisma.sponsor.findUnique({ where: { id: sponsorId }, select: { id: true } }),
+    prisma.event.findUnique({ where: { id: eventId }, select: { id: true } }),
+  ]);
+  if (!sponsor) throw new Error('Sponsor not found');
+  if (!event) throw new Error('Event not found');
+
+  const existing = await prisma.eventSponsor.findUnique({
+    where: { eventId_sponsorId: { eventId, sponsorId } },
+  });
+  if (existing) throw new Error('Sponsor is already linked to this event');
+
+  return prisma.eventSponsor.create({
+    data: { eventId, sponsorId },
+    select: { eventId: true, sponsorId: true, createdAt: true },
+  });
+}
+
+export async function unlinkSponsorFromEvent(sponsorId: string, eventId: string) {
+  const existing = await prisma.eventSponsor.findUnique({
+    where: { eventId_sponsorId: { eventId, sponsorId } },
+  });
+  if (!existing) throw new Error('Sponsor is not linked to this event');
+
+  return prisma.eventSponsor.delete({
+    where: { eventId_sponsorId: { eventId, sponsorId } },
+  });
+}
+
+export async function getEventSponsors(eventId: string) {
+  return prisma.eventSponsor.findMany({
+    where: { eventId },
+    include: {
+      sponsor: {
+        select: {
+          id: true,
+          companyName: true,
+          slug: true,
+          logoUrl: true,
+          tier: true,
+          isPublished: true,
+        },
+      },
+    },
+    orderBy: { sponsor: { displayOrder: 'asc' } },
+  });
+}
+
 export async function getSponsorStats() {
   const [total, published, byTier] = await Promise.all([
     prisma.sponsor.count(),

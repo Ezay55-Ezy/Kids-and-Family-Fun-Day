@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getEvent, EventNotFoundError } from '@/services/event-service';
 import EventForm from '@/components/events/EventForm';
 import TicketTypeList from '@/components/ticket-types/TicketTypeList';
+import EventSponsors from '@/components/events/EventSponsors';
 
 export const metadata = {
   title: 'Edit Event',
@@ -70,6 +71,10 @@ export default async function EditEventPage({
 
       <div className="border-t border-ink/10 pt-8">
         <TicketTypeList eventId={event.id} />
+      </div>
+
+      <div className="border-t border-ink/10 pt-8">
+        <EventSponsors eventId={event.id} />
       </div>
     </div>
   );
