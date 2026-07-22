@@ -46,5 +46,8 @@ next-env.d.ts
 public/uploads/*
 !public/uploads/.gitkeep
 
+# prisma generated client
+src/generated/
+
 # Performance test results (too large for git)
 performance/results/

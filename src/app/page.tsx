@@ -900,10 +900,10 @@ export default async function HomePage() {
               &copy; {new Date().getFullYear()} Kids &amp; Family Fun Day Kenya. All rights reserved.
             </p>
             <div className="flex gap-5">
-              <Link href="#" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">
+              <Link href="/privacy" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">
+              <Link href="/terms" className="text-xs text-slate-400 hover:text-slate-700 transition-colors">
                 Terms of Service
               </Link>
             </div>

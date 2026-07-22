@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
+import { requireAdmin } from '@/lib/auth-utils';
 import { VAPID_PUBLIC_KEY } from '@/services/push-service';
 import DashboardShell from '@/components/dashboard/DashboardShell';
 import { adminNavItems, adminBottomNav } from '@/components/dashboard/nav-items';
@@ -13,6 +14,12 @@ export default async function AdminLayout({
 
   if (!session?.user) {
     redirect('/auth/login');
+  }
+
+  try {
+    await requireAdmin(session.user.id);
+  } catch {
+    redirect('/dashboard');
   }
 
   return (
