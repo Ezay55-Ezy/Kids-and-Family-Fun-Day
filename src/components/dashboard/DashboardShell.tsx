@@ -337,7 +337,7 @@ export default function DashboardShell({ user, initialUnreadCount, vapidPublicKe
             </button>
 
             {notifOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 rounded-xl bg-paper border border-ink/10 shadow-soft-lg py-1 z-50 max-h-[480px] flex flex-col">
+              <div className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] max-w-80 rounded-xl bg-paper border border-ink/10 shadow-soft-lg py-1 z-50 max-h-[480px] flex flex-col">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-ink/10 shrink-0">
                   <p className="text-sm font-semibold text-ink">Notifications</p>
                   {unreadCount > 0 && (

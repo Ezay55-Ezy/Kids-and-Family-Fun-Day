@@ -807,7 +807,7 @@ export default async function HomePage() {
                     key={social.label}
                     href="#"
                     aria-label={social.label}
-                    className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-colors"
+                    className="flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-colors"
                   >
                     <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d={social.path} />

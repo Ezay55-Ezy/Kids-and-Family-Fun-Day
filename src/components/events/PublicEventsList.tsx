@@ -112,13 +112,13 @@ export default function PublicEventsList() {
           />
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex rounded-lg border border-ink/10 p-0.5 bg-ink/5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex overflow-x-auto rounded-lg border border-ink/10 p-0.5 bg-ink/5">
             {timeframeOptions.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => setTimeframe(opt.value)}
-                className={`rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                className={`shrink-0 rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors ${
                   timeframe === opt.value
                     ? 'bg-paper text-ink shadow-sm'
                     : 'text-ink/50 hover:text-ink'
@@ -132,7 +132,7 @@ export default function PublicEventsList() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
-            className="input-base w-auto min-w-[120px] py-2.5 text-sm"
+            className="input-base w-full min-w-[120px] py-2.5 text-sm sm:w-auto"
           >
             {sortOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>

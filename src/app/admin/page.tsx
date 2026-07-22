@@ -177,7 +177,7 @@ export default async function AdminOverviewPage() {
           {eventsByStatusData.length > 0 && (
             <div className="rounded-xl border border-ink/10 bg-paper p-5 shadow-soft">
               <h2 className="font-display text-base font-semibold text-ink mb-4">Events by Status</h2>
-              <div className="flex items-center gap-8">
+              <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-8">
                 <div className="shrink-0">
                   <DonutChart data={eventsByStatusData} size={140} />
                 </div>

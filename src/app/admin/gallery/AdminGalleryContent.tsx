@@ -137,7 +137,7 @@ export default function AdminGalleryContent() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold text-ink">Gallery Management</h1>
           <p className="mt-1 font-body text-ink/60">Upload and manage event gallery images</p>
@@ -288,7 +288,7 @@ export default function AdminGalleryContent() {
       )}
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-ink/50">
             Showing {((currentPage - 1) * 10) + 1}–{Math.min(currentPage * 10, total)} of {total}
           </p>

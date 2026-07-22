@@ -66,7 +66,7 @@ export default async function ServiceDetailPage({
 
           <div className="rounded-xl bg-paper border border-ink/10 shadow-soft-lg overflow-hidden">
             {service.imageUrl ? (
-              <div className="aspect-[21/9] overflow-hidden bg-ink/5">
+              <div className="aspect-[16/9] sm:aspect-[21/9] overflow-hidden bg-ink/5">
                 <img
                   src={service.imageUrl}
                   alt={service.name}
@@ -74,7 +74,7 @@ export default async function ServiceDetailPage({
                 />
               </div>
             ) : (
-              <div className="aspect-[21/9] bg-gradient-to-br from-sky/20 via-sun/20 to-grass/20 flex items-center justify-center">
+              <div className="aspect-[16/9] sm:aspect-[21/9] bg-gradient-to-br from-sky/20 via-sun/20 to-grass/20 flex items-center justify-center">
                 <svg className="h-16 w-16 text-ink/20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                   <rect x="3" y="3" width="18" height="18" rx="2" />
                   <circle cx="8.5" cy="8.5" r="1.5" />

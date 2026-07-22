@@ -88,7 +88,7 @@ export default function GalleryPage() {
             ))}
           </div>
         ) : images.length === 0 ? (
-          <div className="rounded-xl border border-ink/10 bg-white p-16 text-center">
+          <div className="rounded-xl border border-ink/10 bg-white p-8 sm:p-16 text-center">
             <p className="text-lg text-ink/40">No gallery images yet</p>
             <Link href="/events" className="mt-4 inline-block text-sm text-sky hover:underline">
               Browse upcoming events
