@@ -18,7 +18,7 @@ export default function MobileMenu() {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink/70 hover:bg-ink/5 hover:text-ink transition-colors"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
         aria-label={open ? 'Close menu' : 'Open menu'}
       >
         {open ? (
@@ -35,39 +35,32 @@ export default function MobileMenu() {
       </button>
 
       {open && (
-        <div className="absolute inset-x-0 top-full z-50 border-b border-ink/10 bg-paper shadow-soft-lg">
-          <nav className="mx-auto max-w-7xl px-4 py-4 space-y-1">
+        <div className="absolute inset-x-0 top-full z-50 border-b border-slate-200 bg-white shadow-lg">
+          <nav className="mx-auto max-w-7xl px-4 py-3 space-y-0.5">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-ink/70 hover:bg-ink/5 hover:text-ink transition-colors"
+                className="block rounded-md px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"
               >
                 {link.label}
               </Link>
             ))}
-            <div className="border-t border-ink/10 mt-2 pt-2 space-y-1">
+            <div className="border-t border-slate-100 mt-2 pt-2 space-y-0.5">
               <Link
                 href="/auth/login"
                 onClick={() => setOpen(false)}
-                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-ink/70 hover:bg-ink/5 hover:text-ink transition-colors"
+                className="block rounded-md px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"
               >
                 Sign In
               </Link>
               <Link
                 href="/auth/register"
                 onClick={() => setOpen(false)}
-                className="block rounded-lg px-4 py-2.5 text-sm font-medium text-ink/70 hover:bg-ink/5 hover:text-ink transition-colors"
+                className="block rounded-md bg-teal-700 px-3 py-2.5 text-center text-sm font-semibold text-white hover:bg-teal-800 transition-colors"
               >
                 Register
-              </Link>
-              <Link
-                href="/events"
-                onClick={() => setOpen(false)}
-                className="block rounded-lg bg-coral px-4 py-2.5 text-center text-sm font-semibold text-paper hover:bg-coral/90 transition-colors"
-              >
-                Book an Event
               </Link>
             </div>
           </nav>

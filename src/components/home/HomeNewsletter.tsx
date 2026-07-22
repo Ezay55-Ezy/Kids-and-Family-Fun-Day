@@ -37,20 +37,20 @@ export default function HomeNewsletter() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 rounded-xl border border-paper/20 bg-paper/10 px-4 py-3 text-sm text-paper placeholder:text-paper/40 focus:border-coral focus:outline-none focus:ring-2 focus:ring-coral/20 backdrop-blur-sm transition-colors"
+        className="flex-1 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-colors"
       />
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="rounded-xl bg-coral px-6 py-3 text-sm font-semibold text-paper hover:bg-coral/90 disabled:opacity-50 transition-colors whitespace-nowrap"
+        className="rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 shadow-sm disabled:opacity-50 transition-all duration-200 whitespace-nowrap"
       >
         {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
       </button>
       {status === 'success' && (
-        <p className="absolute -bottom-7 left-0 text-sm text-grass">{message}</p>
+        <p className="absolute -bottom-6 left-0 text-sm text-teal-700">{message}</p>
       )}
       {status === 'error' && (
-        <p className="absolute -bottom-7 left-0 text-sm text-coral">{message}</p>
+        <p className="absolute -bottom-6 left-0 text-sm text-red-600">{message}</p>
       )}
     </form>
   );
