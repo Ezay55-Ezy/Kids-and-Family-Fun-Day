@@ -39,9 +39,11 @@ export default function AdminGalleryContent() {
   const [stats, setStats] = useState<GalleryStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const currentStatus = searchParams.get('status') || '';
   const currentSearch = searchParams.get('query') || '';
@@ -75,6 +77,13 @@ export default function AdminGalleryContent() {
     fetchImages();
   }, [fetchImages]);
 
+  useEffect(() => {
+    if (success) {
+      const t = setTimeout(() => setSuccess(''), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [success]);
+
   function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
@@ -95,12 +104,14 @@ export default function AdminGalleryContent() {
 
   async function handleTogglePublish(imageId: string) {
     setTogglingId(imageId);
+    setError('');
     try {
       const res = await fetch(`/api/admin/gallery/${imageId}/publish`, { method: 'POST' });
       if (!res.ok) throw new Error('Failed');
       setImages((prev) =>
         prev.map((img) => (img.id === imageId ? { ...img, isPublished: !img.isPublished } : img))
       );
+      setSuccess('Status updated');
     } catch {
       setError('Failed to toggle publish status');
     } finally {
@@ -110,12 +121,17 @@ export default function AdminGalleryContent() {
 
   async function handleDelete(imageId: string) {
     if (!confirm('Delete this image? This cannot be undone.')) return;
+    setDeletingId(imageId);
+    setError('');
     try {
       const res = await fetch(`/api/admin/gallery/${imageId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed');
+      setSuccess('Image deleted');
       fetchImages();
     } catch {
       setError('Failed to delete image');
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -128,42 +144,49 @@ export default function AdminGalleryContent() {
         </div>
         <Link
           href="/admin/gallery/new"
-          className="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-white hover:bg-ink/90"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 transition-colors"
         >
-          + Add Image
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          Add Image
         </Link>
       </div>
 
+      {success && (
+        <div className="rounded-xl bg-green-50 border border-green-200 p-3 text-sm text-green-700">{success}</div>
+      )}
+
       {stats && (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-xl border border-ink/5 bg-paper p-4">
+          <div className="rounded-xl border border-ink/5 bg-white p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Total Images</p>
             <p className="mt-1 text-2xl font-bold text-ink">{stats.total}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-paper p-4">
+          <div className="rounded-xl border border-ink/5 bg-white p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Published</p>
-            <p className="mt-1 text-2xl font-bold text-grass">{stats.published}</p>
+            <p className="mt-1 text-2xl font-bold text-teal-700">{stats.published}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-paper p-4">
+          <div className="rounded-xl border border-ink/5 bg-white p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Draft</p>
-            <p className="mt-1 text-2xl font-bold text-sun">{stats.draft}</p>
+            <p className="mt-1 text-2xl font-bold text-amber-600">{stats.draft}</p>
           </div>
-          <div className="rounded-xl border border-ink/5 bg-paper p-4">
+          <div className="rounded-xl border border-ink/5 bg-white p-4">
             <p className="text-xs font-medium uppercase tracking-wide text-ink/50">Event-linked</p>
-            <p className="mt-1 text-2xl font-bold text-sky">{stats.withEvent}</p>
+            <p className="mt-1 text-2xl font-bold text-sky-600">{stats.withEvent}</p>
           </div>
         </div>
       )}
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-1 rounded-lg bg-ink/5 p-1">
+        <div className="flex gap-1 rounded-xl bg-ink/5 p-1">
           {filterTabs.map((tab) => (
             <button
               key={tab.value}
               onClick={() => updateParam('status', tab.value)}
-              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
                 currentStatus === tab.value
-                  ? 'bg-paper text-ink shadow-sm'
+                  ? 'bg-white text-ink shadow-sm'
                   : 'text-ink/60 hover:text-ink'
               }`}
             >
@@ -177,16 +200,16 @@ export default function AdminGalleryContent() {
             name="query"
             defaultValue={currentSearch}
             placeholder="Search images..."
-            className="rounded-lg border border-ink/10 bg-paper px-3 py-1.5 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky"
+            className="rounded-xl border border-ink/10 bg-white px-4 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
           />
-          <button type="submit" className="rounded-lg bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-ink/90">
+          <button type="submit" className="rounded-xl bg-teal-700 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800 transition-colors">
             Search
           </button>
         </form>
       </div>
 
       {error && (
-        <div className="rounded-lg bg-coral/10 p-3 text-sm text-coral">{error}</div>
+        <div className="rounded-xl bg-red-50 border border-red-200 p-3 text-sm text-red-600">{error}</div>
       )}
 
       {loading ? (
@@ -196,9 +219,9 @@ export default function AdminGalleryContent() {
           ))}
         </div>
       ) : images.length === 0 ? (
-        <div className="rounded-xl border border-ink/5 bg-paper p-12 text-center">
+        <div className="rounded-xl border border-ink/5 bg-white p-12 text-center">
           <p className="text-ink/40">No gallery images found</p>
-          <Link href="/admin/gallery/new" className="mt-3 inline-block text-sm text-sky hover:underline">
+          <Link href="/admin/gallery/new" className="mt-3 inline-block text-sm text-teal-700 hover:underline font-medium">
             Upload your first image
           </Link>
         </div>
@@ -207,7 +230,7 @@ export default function AdminGalleryContent() {
           {images.map((image) => (
             <div
               key={image.id}
-              className="group overflow-hidden rounded-xl border border-ink/5 bg-paper transition-colors hover:border-sky/20"
+              className="group overflow-hidden rounded-xl border border-ink/10 bg-white transition-all hover:shadow-md"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-ink/5">
                 <img
@@ -218,45 +241,44 @@ export default function AdminGalleryContent() {
                 />
                 {!image.isPublished && (
                   <div className="absolute left-2 top-2">
-                    <span className="inline-flex items-center rounded-full bg-ink/80 px-2 py-0.5 text-xs font-medium text-white">
+                    <span className="inline-flex items-center rounded-full bg-slate-800 px-2.5 py-1 text-xs font-semibold text-white">
                       Draft
                     </span>
                   </div>
                 )}
               </div>
-              <div className="p-3">
-                <div className="flex items-start justify-between">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-ink">{image.title || 'Untitled'}</p>
-                    <p className="text-xs text-ink/50">
-                      {image.event ? `Event: ${image.event.title}` : 'Standalone'} · Order #{image.displayOrder}
-                    </p>
-                    <p className="text-xs text-ink/40">{formatDate(image.createdAt)}</p>
-                  </div>
+              <div className="p-4">
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-ink">{image.title || 'Untitled'}</p>
+                  <p className="text-xs text-ink/50 mt-0.5">
+                    {image.event ? `Event: ${image.event.title}` : 'Standalone'} · Order #{image.displayOrder}
+                  </p>
+                  <p className="text-xs text-ink/40 mt-0.5">{formatDate(image.createdAt)}</p>
                 </div>
-                <div className="mt-2 flex gap-2">
+                <div className="mt-3 flex flex-wrap gap-2">
                   <button
                     onClick={() => handleTogglePublish(image.id)}
                     disabled={togglingId === image.id}
-                    className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all active:scale-95 ${
                       image.isPublished
                         ? 'bg-teal-700 text-white hover:bg-teal-800'
-                        : 'bg-slate-700 text-white hover:bg-slate-800'
+                        : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
                     } disabled:opacity-50`}
                   >
                     {togglingId === image.id ? '...' : image.isPublished ? 'Published' : 'Unpublished'}
                   </button>
                   <Link
                     href={`/admin/gallery/${image.id}`}
-                    className="rounded-lg bg-slate-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
+                    className="rounded-xl bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-200 transition-all active:scale-95"
                   >
                     Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(image.id)}
-                    className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700"
+                    disabled={deletingId === image.id}
+                    className="rounded-xl bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition-all active:scale-95 disabled:opacity-50"
                   >
-                    Delete
+                    {deletingId === image.id ? '...' : 'Delete'}
                   </button>
                 </div>
               </div>
@@ -275,8 +297,8 @@ export default function AdminGalleryContent() {
               <button
                 key={page}
                 onClick={() => updateParam('page', page === 1 ? '' : String(page))}
-                className={`rounded-md px-3 py-1 text-sm font-medium ${
-                  page === currentPage ? 'bg-teal-700 text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                className={`rounded-xl px-3 py-1.5 text-sm font-semibold transition-all active:scale-95 ${
+                  page === currentPage ? 'bg-teal-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 {page}
