@@ -12,7 +12,6 @@ export interface GalleryListResult {
     isPublished: boolean;
     eventId: string | null;
     createdAt: Date;
-    _count: { events: number };
     event: { id: string; title: string } | null;
   }>;
   total: number;
@@ -55,7 +54,6 @@ export async function listGalleryImages(filters: GalleryFilterData): Promise<Gal
         isPublished: true,
         eventId: true,
         createdAt: true,
-        _count: { select: { events: true } },
         event: { select: { id: true, title: true } },
       },
       orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],

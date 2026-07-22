@@ -15,7 +15,6 @@ interface GalleryImage {
   isPublished: boolean;
   eventId: string | null;
   createdAt: string;
-  _count: { events: number };
   event: { id: string; title: string } | null;
 }
 
