@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, useRef, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface EventFormData {
@@ -64,6 +64,8 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
   const [submitError, setSubmitError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -87,6 +89,28 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
+
+  async function handleBannerUpload(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: fd });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Upload failed');
+      }
+      const data = await res.json();
+      setFormData((prev) => ({ ...prev, bannerImageUrl: data.url }));
+    } catch (err) {
+      setSubmitError((err as Error).message);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  }
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
@@ -323,17 +347,32 @@ export default function EventForm({ initialData, mode }: EventFormProps) {
         <h3 className="font-display font-semibold text-lg text-ink">Media & Capacity</h3>
 
         <div>
-          <label htmlFor="bannerImageUrl" className="label-base">Cover image URL</label>
-          <input
-            id="bannerImageUrl"
-            name="bannerImageUrl"
-            type="text"
-            value={formData.bannerImageUrl}
-            onChange={handleChange}
-            className={inputClass('bannerImageUrl')}
-            placeholder="https://example.com/image.jpg"
-          />
-          <p className="mt-1 text-xs text-ink/40">Paste an image URL, or use the image uploader once Cloudinary is integrated.</p>
+          <label htmlFor="bannerImageUrl" className="label-base">Cover image</label>
+          <div className="mt-1 flex gap-2">
+            <input
+              id="bannerImageUrl"
+              name="bannerImageUrl"
+              type="text"
+              value={formData.bannerImageUrl}
+              onChange={handleChange}
+              className={`flex-1 rounded-lg border bg-paper px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-sky focus:outline-none focus:ring-1 focus:ring-sky ${errors.bannerImageUrl ? 'border-coral' : 'border-ink/10'}`}
+              placeholder="Paste URL or upload below"
+            />
+            <label className="cursor-pointer rounded-lg border border-ink/10 bg-paper px-4 py-2 text-sm font-medium text-ink/60 hover:bg-ink/5 shrink-0">
+              {uploading ? 'Uploading...' : 'Upload'}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleBannerUpload}
+                className="hidden"
+                disabled={uploading}
+              />
+            </label>
+          </div>
+          {formData.bannerImageUrl && (
+            <img src={formData.bannerImageUrl} alt="Banner preview" className="mt-3 max-h-48 w-full rounded-lg object-cover bg-ink/5" />
+          )}
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
