@@ -160,7 +160,7 @@ export default function EventSponsors({ eventId }: EventSponsorsProps) {
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-coral/10 text-coral font-display font-bold text-sm shrink-0">
                   {link.sponsor.logoUrl ? (
-                    <img src={link.sponsor.logoUrl} alt="" className="h-6 w-6 object-contain rounded mix-blend-multiply" />
+                    <img src={link.sponsor.logoUrl} alt="" className="h-6 w-6 object-contain rounded" />
                   ) : (
                     link.sponsor.companyName.charAt(0).toUpperCase()
                   )}

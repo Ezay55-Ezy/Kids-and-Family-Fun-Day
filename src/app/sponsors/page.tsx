@@ -101,11 +101,11 @@ export default async function SponsorsPage() {
                       const card = (
                         <div className={`group rounded-2xl border ${config.card} ${config.size} shadow-soft hover:shadow-soft-lg transition-all duration-300`}>
                           <div className="flex items-center gap-4 mb-4">
-                            <div className={`flex h-14 w-14 items-center justify-center rounded-xl ${config.icon} font-display font-bold text-xl shrink-0`}>
+                            <div className={`flex h-14 w-14 items-center justify-center rounded-xl overflow-hidden ${config.icon} shrink-0`}>
                               {sponsor.logoUrl ? (
-                                <img src={sponsor.logoUrl} alt={sponsor.companyName} className="h-10 w-10 object-contain rounded mix-blend-multiply" />
+                                <img src={sponsor.logoUrl} alt={sponsor.companyName} className="h-full w-full object-contain" />
                               ) : (
-                                sponsor.companyName.charAt(0).toUpperCase()
+                                <span className="font-display font-bold text-xl">{sponsor.companyName.charAt(0).toUpperCase()}</span>
                               )}
                             </div>
                             <div className="min-w-0">

@@ -682,13 +682,13 @@ export default async function HomePage() {
                       <img
                         src={sponsor.logoUrl}
                         alt={sponsor.companyName}
-                        className="h-7 md:h-8 w-auto object-contain mix-blend-multiply"
+                        className="h-7 md:h-8 w-auto object-contain"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                       />
-                    ) : (
-                      <span className="font-display font-bold text-base text-slate-500">
-                        {sponsor.companyName}
-                      </span>
-                    )}
+                    ) : null}
+                    <span className="font-display font-bold text-sm text-slate-600">
+                      {sponsor.companyName}
+                    </span>
                   </div>
                 );
 

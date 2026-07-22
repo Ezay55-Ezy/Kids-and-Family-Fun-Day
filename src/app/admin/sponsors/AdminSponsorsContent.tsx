@@ -224,7 +224,7 @@ export default function AdminSponsorsContent() {
             >
               <div className="flex items-center gap-4">
                 {sponsor.logoUrl ? (
-                  <img src={sponsor.logoUrl} alt="" className="h-10 w-10 rounded-lg object-contain mix-blend-multiply" />
+                  <img src={sponsor.logoUrl} alt="" className="h-10 w-10 rounded-lg object-contain" />
                 ) : (
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink/10 text-sm font-bold text-ink/60">
                     {sponsor.companyName.charAt(0)}
