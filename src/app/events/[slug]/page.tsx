@@ -285,7 +285,7 @@ export default async function EventDetailPage(props: { params: Params }) {
                       <img
                         src={sponsor.logoUrl}
                         alt={sponsor.companyName}
-                        className="h-14 w-14 rounded-lg object-cover bg-ink/5"
+                        className="h-14 w-14 rounded-lg object-cover bg-ink/5 mix-blend-multiply"
                         loading="lazy"
                       />
                     ) : (

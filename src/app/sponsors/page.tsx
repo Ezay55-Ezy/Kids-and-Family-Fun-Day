@@ -103,7 +103,7 @@ export default async function SponsorsPage() {
                           <div className="flex items-center gap-4 mb-4">
                             <div className={`flex h-14 w-14 items-center justify-center rounded-xl ${config.icon} font-display font-bold text-xl shrink-0`}>
                               {sponsor.logoUrl ? (
-                                <img src={sponsor.logoUrl} alt={sponsor.companyName} className="h-10 w-10 object-contain rounded" />
+                                <img src={sponsor.logoUrl} alt={sponsor.companyName} className="h-10 w-10 object-contain rounded mix-blend-multiply" />
                               ) : (
                                 sponsor.companyName.charAt(0).toUpperCase()
                               )}

@@ -682,7 +682,7 @@ export default async function HomePage() {
                       <img
                         src={sponsor.logoUrl}
                         alt={sponsor.companyName}
-                        className="h-7 md:h-8 w-auto object-contain"
+                        className="h-7 md:h-8 w-auto object-contain mix-blend-multiply"
                       />
                     ) : (
                       <span className="font-display font-bold text-base text-slate-500">
