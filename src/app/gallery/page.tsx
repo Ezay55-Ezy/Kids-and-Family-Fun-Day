@@ -25,7 +25,7 @@ export default function GalleryPage() {
   useEffect(() => {
     async function fetchImages() {
       try {
-        const res = await fetch('/api/gallery');
+        const res = await fetch('/api/gallery?limit=50');
         if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
         setImages(data.images ?? data);
@@ -50,17 +50,6 @@ export default function GalleryPage() {
   const navigateLightbox = useCallback((index: number) => {
     setLightboxIndex(index);
   }, []);
-
-  // Group images by event
-  const eventGroups = images.reduce<Record<string, GalleryImage[]>>((acc, img) => {
-    const key = img.event ? img.event.id : 'standalone';
-    if (!acc[key]) acc[key] = [];
-    acc[key].push(img);
-    return acc;
-  }, {});
-
-  const standaloneImages = eventGroups['standalone'] || [];
-  const eventEntries = Object.entries(eventGroups).filter(([key]) => key !== 'standalone');
 
   return (
     <div className="min-h-screen bg-paper">
@@ -106,75 +95,30 @@ export default function GalleryPage() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-12">
-            {standaloneImages.length > 0 && (
-              <section>
-                <h2 className="mb-6 font-display text-2xl font-bold text-ink">All Photos</h2>
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                  {standaloneImages.map((image, idx) => (
-                    <button
-                      key={image.id}
-                      onClick={() => openLightbox(idx)}
-                      className="group relative aspect-[4/3] overflow-hidden rounded-xl bg-ink/5"
-                    >
-                      <img
-                        src={image.imageUrl}
-                        alt={image.title || image.caption || ''}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-ink/0 transition-colors group-hover:bg-ink/20" />
-                      {(image.title || image.caption) && (
-                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/60 to-transparent p-3 opacity-0 transition-opacity group-hover:opacity-100">
-                          <p className="text-xs font-medium text-paper">{image.title || image.caption}</p>
-                        </div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {eventEntries.map(([eventId, eventImages]) => {
-              const event = eventImages[0]?.event;
-              return (
-                <section key={eventId}>
-                  <div className="mb-6 flex items-center gap-3">
-                    <h2 className="font-display text-2xl font-bold text-ink">{event?.title || 'Event'}</h2>
-                    {event && (
-                      <Link href={`/events/${event.slug}`} className="text-sm text-sky hover:underline">
-                        View Event →
-                      </Link>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {images.map((image, idx) => (
+              <button
+                key={image.id}
+                onClick={() => openLightbox(idx)}
+                className="group relative aspect-[4/3] overflow-hidden rounded-xl bg-ink/5"
+              >
+                <img
+                  src={image.imageUrl}
+                  alt={image.title || image.caption || ''}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-ink/0 transition-colors group-hover:bg-ink/20" />
+                {(image.title || image.caption || image.event) && (
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/60 to-transparent p-3 opacity-0 transition-opacity group-hover:opacity-100">
+                    <p className="text-xs font-medium text-paper">{image.title || image.caption}</p>
+                    {image.event && (
+                      <p className="text-xs text-paper/70 mt-0.5">{image.event.title}</p>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                    {eventImages.map((image, idx) => {
-                      const globalIdx = images.findIndex((i) => i.id === image.id);
-                      return (
-                        <button
-                          key={image.id}
-                          onClick={() => openLightbox(globalIdx)}
-                          className="group relative aspect-[4/3] overflow-hidden rounded-xl bg-ink/5"
-                        >
-                          <img
-                            src={image.imageUrl}
-                            alt={image.title || image.caption || ''}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-ink/0 transition-colors group-hover:bg-ink/20" />
-                          {(image.title || image.caption) && (
-                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/60 to-transparent p-3 opacity-0 transition-opacity group-hover:opacity-100">
-                              <p className="text-xs font-medium text-paper">{image.title || image.caption}</p>
-                            </div>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </section>
-              );
-            })}
+                )}
+              </button>
+            ))}
           </div>
         )}
       </main>

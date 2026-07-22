@@ -240,21 +240,21 @@ export default function AdminGalleryContent() {
                     disabled={togglingId === image.id}
                     className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
                       image.isPublished
-                        ? 'bg-grass/10 text-grass hover:bg-grass/20'
-                        : 'bg-ink/5 text-ink/50 hover:bg-ink/10'
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     } disabled:opacity-50`}
                   >
                     {togglingId === image.id ? '...' : image.isPublished ? 'Published' : 'Unpublished'}
                   </button>
                   <Link
                     href={`/admin/gallery/${image.id}`}
-                    className="rounded-lg bg-ink/5 px-2.5 py-1 text-xs font-medium text-ink/60 hover:bg-ink/10"
+                    className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200"
                   >
                     Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(image.id)}
-                    className="rounded-lg bg-coral/5 px-2.5 py-1 text-xs font-medium text-coral/60 hover:bg-coral/10"
+                    className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-100"
                   >
                     Delete
                   </button>
