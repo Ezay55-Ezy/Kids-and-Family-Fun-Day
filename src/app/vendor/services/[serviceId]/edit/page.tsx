@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -29,6 +29,7 @@ interface ServiceData {
   category: string | null;
   price: number;
   pricingType: string;
+  imageUrl: string | null;
   isActive: boolean;
 }
 
@@ -39,6 +40,31 @@ export default function EditServicePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: fd });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Upload failed');
+      }
+      const data = await res.json();
+      setImageUrl(data.url);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  }
 
   useEffect(() => {
     async function fetchService() {
@@ -47,6 +73,7 @@ export default function EditServicePage() {
         if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
         setService(data.service);
+        setImageUrl(data.service.imageUrl || '');
       } catch {
         setError('Failed to load service.');
       } finally {
@@ -69,6 +96,7 @@ export default function EditServicePage() {
       category: formData.get('category') || null,
       price: formData.get('price') ? Number(formData.get('price')) : undefined,
       pricingType: formData.get('pricingType') || undefined,
+      imageUrl: imageUrl || null,
     };
 
     try {
@@ -198,6 +226,35 @@ export default function EditServicePage() {
             defaultValue={service.description}
             className="input-field w-full"
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-ink mb-1.5">
+            Service Image
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              className="input-field flex-1"
+              placeholder="Paste URL or upload below"
+            />
+            <label className="cursor-pointer rounded-lg border border-ink/10 bg-paper px-4 py-2 text-sm font-medium text-ink/60 hover:bg-ink/5 shrink-0">
+              {uploading ? 'Uploading...' : 'Upload'}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleImageUpload}
+                className="hidden"
+                disabled={uploading}
+              />
+            </label>
+          </div>
+          {imageUrl && (
+            <img src={imageUrl} alt="Preview" className="mt-3 max-h-48 w-full rounded-lg object-cover bg-ink/5" />
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

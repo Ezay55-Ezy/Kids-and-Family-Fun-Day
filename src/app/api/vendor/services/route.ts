@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   }
 
   const json = await request.json();
-  const { name, shortDescription, description, category, price, pricingType } = json;
+  const { name, shortDescription, description, category, price, pricingType, imageUrl } = json;
 
   if (!name || typeof name !== 'string' || !name.trim()) {
     return NextResponse.json({ error: 'Service name is required.' }, { status: 400 });
@@ -61,6 +61,7 @@ export async function POST(request: Request) {
       category: category || undefined,
       price: Number(price),
       pricingType: pricingType || undefined,
+      imageUrl: imageUrl || undefined,
     });
 
     return NextResponse.json({ service }, { status: 201 });

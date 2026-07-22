@@ -339,6 +339,7 @@ interface CreateServiceInput {
   category?: string;
   price: number;
   pricingType?: string;
+  imageUrl?: string;
 }
 
 interface UpdateServiceInput {
@@ -348,6 +349,7 @@ interface UpdateServiceInput {
   category?: string;
   price?: number;
   pricingType?: string;
+  imageUrl?: string;
 }
 
 export async function getVendorServices(vendorId: string) {
@@ -389,6 +391,7 @@ export async function createVendorService(vendorId: string, input: CreateService
       category: (input.category as ServiceCategory) || null,
       price: input.price,
       pricingType: (input.pricingType as PricingType) || 'FIXED',
+      imageUrl: input.imageUrl || null,
       isActive: true,
       isArchived: false,
     },
@@ -420,6 +423,7 @@ export async function updateVendorService(
   if (input.category !== undefined) data.category = (input.category || null) as ServiceCategory;
   if (input.price !== undefined) data.price = input.price;
   if (input.pricingType !== undefined) data.pricingType = (input.pricingType as PricingType) || 'FIXED';
+  if (input.imageUrl !== undefined) data.imageUrl = input.imageUrl || null;
 
   const service = await prisma.service.update({
     where: { id: serviceId },

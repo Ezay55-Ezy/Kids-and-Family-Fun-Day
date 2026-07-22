@@ -76,7 +76,7 @@ export async function PATCH(
       return NextResponse.json({ message: 'Service archived.' });
     }
 
-    const { name, shortDescription, description, category, price, pricingType } = json;
+    const { name, shortDescription, description, category, price, pricingType, imageUrl } = json;
 
     if (name !== undefined && (!name || typeof name !== 'string')) {
       return NextResponse.json({ error: 'Invalid name.' }, { status: 400 });
@@ -92,6 +92,7 @@ export async function PATCH(
       category,
       price: price !== undefined ? Number(price) : undefined,
       pricingType,
+      imageUrl,
     });
 
     return NextResponse.json({ service });
