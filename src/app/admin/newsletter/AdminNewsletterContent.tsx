@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { formatDate } from '@/lib/format';
 
 interface Subscriber {
@@ -122,18 +123,29 @@ export default function AdminNewsletterContent() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold text-ink">Newsletter Subscribers</h1>
           <p className="mt-1 font-body text-ink/60">Manage email subscribers and exports</p>
         </div>
-        <button
-          onClick={handleExport}
-          disabled={exporting || total === 0}
-          className="rounded-lg border border-ink/10 bg-paper px-4 py-2 text-sm font-medium text-ink hover:bg-ink/5 disabled:opacity-50"
-        >
-          {exporting ? 'Exporting...' : 'Export CSV'}
-        </button>
+        <div className="flex gap-2">
+          <Link
+            href="/admin/newsletter/broadcast"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800 transition-colors"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" />
+            </svg>
+            Send Newsletter
+          </Link>
+          <button
+            onClick={handleExport}
+            disabled={exporting || total === 0}
+            className="rounded-xl border border-ink/10 bg-paper px-4 py-2.5 text-sm font-medium text-ink hover:bg-ink/5 disabled:opacity-50"
+          >
+            {exporting ? 'Exporting...' : 'Export CSV'}
+          </button>
+        </div>
       </div>
 
       {stats && (

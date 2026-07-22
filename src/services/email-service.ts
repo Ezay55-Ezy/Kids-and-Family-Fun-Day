@@ -295,3 +295,91 @@ export async function sendBookingCancellationEmail(bookingId: string, preFetched
     console.error('[EMAIL] Unexpected error sending cancellation:', err);
   }
 }
+
+function newsletterHtml(opts: {
+  subject: string;
+  body: string;
+  unsubscribeUrl: string;
+}) {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background-color:#F5F5F4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5F5F4;">
+    <tr><td align="center" style="padding:40px 16px;">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background-color:#FFFFFF;border-radius:8px;overflow:hidden;">
+        <tr>
+          <td style="background-color:#0F766E;padding:32px 32px 24px;text-align:center;">
+            <h1 style="margin:0;font-size:22px;font-weight:700;color:#FCA311;">${escapeHtml(opts.subject)}</h1>
+            <p style="margin:6px 0 0;font-size:14px;color:#FFFFFF;">Kids &amp; Family Fun Day Kenya</p>
+          </td>
+        </tr>
+        <tr><td style="padding:32px;color:#292524;font-size:14px;line-height:1.6;">
+          ${opts.body.split('\n').map(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return '<br>';
+            return `<p style="margin:0 0 12px;">${escapeHtml(trimmed)}</p>`;
+          }).join('')}
+        </td></tr>
+        <tr>
+          <td style="background-color:#0F766E;padding:20px 32px;text-align:center;">
+            <p style="margin:0 0 8px;font-size:12px;color:#A8A29E;">
+              <a href="${opts.unsubscribeUrl}" style="color:#FCA311;text-decoration:underline;">Unsubscribe</a> from this newsletter
+            </p>
+            <p style="margin:0;font-size:12px;color:#A8A29E;">
+              &copy; 2026 Kids &amp; Family Fun Day Kenya. All rights reserved.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
+export interface BroadcastResult {
+  sent: number;
+  failed: number;
+  errors: string[];
+}
+
+export async function sendNewsletterBroadcast(
+  subject: string,
+  body: string,
+  recipients: { id: string; email: string }[],
+): Promise<BroadcastResult> {
+  const baseUrl = getBaseUrl();
+  const result: BroadcastResult = { sent: 0, failed: 0, errors: [] };
+
+  const batchSize = 50;
+  for (let i = 0; i < recipients.length; i += batchSize) {
+    const batch = recipients.slice(i, i + batchSize);
+    const html = newsletterHtml({
+      subject,
+      body,
+      unsubscribeUrl: `${baseUrl}/unsubscribe`,
+    });
+
+    const { data, error } = await getResend().batch.send(
+      batch.map((r) => ({
+        from: `${SENDER_NAME} <${FROM}>`,
+        to: r.email,
+        subject,
+        html,
+      })),
+    );
+
+    if (error) {
+      console.error('[NEWSLETTER] Batch error:', error);
+      result.failed += batch.length;
+      result.errors.push(String(error.message || error));
+    } else {
+      result.sent += batch.length;
+    }
+  }
+
+  console.log(`[NEWSLETTER] Broadcast complete: ${result.sent} sent, ${result.failed} failed`);
+  return result;
+}
