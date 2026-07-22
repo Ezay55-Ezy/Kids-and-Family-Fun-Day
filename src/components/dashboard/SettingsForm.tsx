@@ -27,7 +27,7 @@ function saveSettings(settings: Settings) {
 }
 
 export default function SettingsForm() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [mounted, setMounted] = useState(false);
   const [pushStatus, setPushStatus] = useState<'granted' | 'denied' | 'default' | 'unsupported'>('default');
@@ -138,27 +138,15 @@ export default function SettingsForm() {
         <h3 className="font-display text-base font-semibold text-ink mb-1">Appearance</h3>
         <p className="text-sm text-ink/50 mb-5">Customize how the app looks.</p>
 
-        <label className="flex items-center justify-between gap-4 cursor-pointer">
+        <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm font-medium text-ink">Dark mode</p>
-            <p className="text-xs text-ink/50 mt-0.5">Switch between light and dark theme</p>
+            <p className="text-sm font-medium text-ink">Theme</p>
+            <p className="text-xs text-ink/50 mt-0.5">Follows your device system setting</p>
           </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={theme === 'dark'}
-            onClick={toggleTheme}
-            className={`relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-coral focus:ring-offset-2 focus:ring-offset-paper ${
-              theme === 'dark' ? 'bg-coral' : 'bg-ink/20'
-            }`}
-          >
-            <span
-              className={`inline-block h-5 w-5 transform rounded-full bg-paper shadow-sm transition-transform duration-200 mt-0.5 ${
-                theme === 'dark' ? 'translate-x-5.5' : 'translate-x-0.5'
-              }`}
-            />
-          </button>
-        </label>
+          <span className="inline-flex items-center rounded-full bg-ink/5 px-3 py-1 text-xs font-medium text-ink/60">
+            {theme === 'dark' ? 'Dark' : 'Light'}
+          </span>
+        </div>
       </div>
 
       {/* Account */}

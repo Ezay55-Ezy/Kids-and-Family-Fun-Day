@@ -22,13 +22,13 @@
 
 @layer base {
   :root {
-    --ink: #1F2937;
-    --paper: #FAFAF7;
-    --sky: #F59E0B;
-    --sun: #F97316;
-    --grass: #16A34A;
+    --ink: #2D2A26;
+    --paper: #FAF5EF;
+    --sky: #D97706;
+    --sun: #EA580C;
+    --grass: #15803D;
     --coral: #0F766E;
-    --shadow-color: rgba(31, 41, 55, 0.08);
+    --shadow-color: rgba(45, 42, 38, 0.08);
 
     --font-sora: 'Sora', sans-serif;
     --font-manrope: 'Manrope', sans-serif;
@@ -36,8 +36,8 @@
   }
 
   .dark {
-    --ink: #F3F4F6;
-    --paper: #111827;
+    --ink: #E8E5E0;
+    --paper: #1A1917;
     --sky: #FBBF24;
     --sun: #FB923C;
     --grass: #4ADE80;
