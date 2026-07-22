@@ -669,23 +669,22 @@ export default async function HomePage() {
               {sponsors.map((sponsor) => {
                 const tierStyle =
                   sponsor.tier === 'PLATINUM'
-                    ? 'border-purple-200 bg-purple-50/40 hover:border-purple-300'
+                    ? 'border-purple-200 bg-purple-50 hover:border-purple-300'
                     : sponsor.tier === 'GOLD'
-                      ? 'border-amber-200 bg-amber-50/40 hover:border-amber-300'
+                      ? 'border-amber-200 bg-amber-50 hover:border-amber-300'
                       : sponsor.tier === 'SILVER'
-                        ? 'border-slate-200 bg-slate-50/40 hover:border-slate-300'
-                        : 'border-slate-200 bg-white hover:border-slate-300';
+                        ? 'border-slate-200 bg-slate-100 hover:border-slate-300'
+                        : 'border-slate-200 bg-slate-50 hover:border-slate-300';
 
                 const sponsorLogo = (
                   <div className={`flex items-center gap-3 rounded-lg border px-5 py-3 transition-colors ${tierStyle}`}>
-                    {sponsor.logoUrl ? (
+                    {sponsor.logoUrl && (
                       <img
                         src={sponsor.logoUrl}
                         alt={sponsor.companyName}
                         className="h-7 md:h-8 w-auto object-contain"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                       />
-                    ) : null}
+                    )}
                     <span className="font-display font-bold text-sm text-slate-600">
                       {sponsor.companyName}
                     </span>
