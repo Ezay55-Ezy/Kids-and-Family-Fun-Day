@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Sora, Manrope, IBM_Plex_Mono } from 'next/font/google';
 import ThemeProvider from '@/components/dashboard/ThemeProvider';
+import CookieConsent from '@/components/CookieConsent';
 import './globals.css';
 
 const sora = Sora({
@@ -115,6 +116,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
         </ThemeProvider>
+        <CookieConsent />
       </body>
     </html>
   );
