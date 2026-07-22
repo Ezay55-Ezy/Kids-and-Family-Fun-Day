@@ -238,23 +238,23 @@ export default function AdminGalleryContent() {
                   <button
                     onClick={() => handleTogglePublish(image.id)}
                     disabled={togglingId === image.id}
-                    className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+                    className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
                       image.isPublished
-                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-teal-700 text-white hover:bg-teal-800'
+                        : 'bg-slate-700 text-white hover:bg-slate-800'
                     } disabled:opacity-50`}
                   >
                     {togglingId === image.id ? '...' : image.isPublished ? 'Published' : 'Unpublished'}
                   </button>
                   <Link
                     href={`/admin/gallery/${image.id}`}
-                    className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200"
+                    className="rounded-lg bg-slate-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
                   >
                     Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(image.id)}
-                    className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-100"
+                    className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700"
                   >
                     Delete
                   </button>
@@ -276,7 +276,7 @@ export default function AdminGalleryContent() {
                 key={page}
                 onClick={() => updateParam('page', page === 1 ? '' : String(page))}
                 className={`rounded-md px-3 py-1 text-sm font-medium ${
-                  page === currentPage ? 'bg-ink text-white' : 'text-ink/60 hover:bg-ink/5'
+                  page === currentPage ? 'bg-teal-700 text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
                 }`}
               >
                 {page}
