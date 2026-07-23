@@ -55,7 +55,8 @@ export const authConfig: NextAuthConfig = {
         pathname.startsWith('/profile') ||
         pathname.startsWith('/settings') ||
         pathname.startsWith('/bookings') ||
-        pathname.startsWith('/payments');
+        pathname.startsWith('/payments') ||
+        pathname.startsWith('/scan');
 
       if (isProtectedRoute && !isLoggedIn) return false;
 
@@ -86,6 +87,9 @@ export const authConfig: NextAuthConfig = {
       }
       if (pathname.startsWith('/dashboard') && (role === 'ADMIN' || role === 'VENDOR')) {
         return Response.redirect(new URL(role === 'ADMIN' ? '/admin' : '/vendor', request.nextUrl.origin));
+      }
+      if (pathname.startsWith('/scan') && role !== 'ADMIN' && role !== 'VENDOR') {
+        return Response.redirect(new URL('/dashboard', request.nextUrl.origin));
       }
 
       return true;

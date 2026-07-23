@@ -103,6 +103,17 @@ const iconArrowRight = (
   </svg>
 );
 
+const iconScan = (
+  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+    <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+    <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+    <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+    <line x1="7" y1="12" x2="17" y2="12" />
+    <line x1="12" y1="7" x2="12" y2="17" />
+  </svg>
+);
+
 const iconReport = (
   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -145,6 +156,7 @@ export const adminNavItems: NavItem[] = [
   { label: 'Sponsors', href: '/admin/sponsors', icon: iconStar },
   { label: 'Gallery', href: '/admin/gallery', icon: iconCamera },
   { label: 'Newsletter', href: '/admin/newsletter', icon: iconMail },
+  { label: 'Scan Tickets', href: '/scan', icon: iconScan },
   { label: 'Reports', href: '/admin/reports', icon: iconReport },
   { label: 'Analytics', href: '/admin/analytics', icon: iconBarChart },
   { label: 'Notifications', href: '/admin/notifications', icon: iconNotifications },
