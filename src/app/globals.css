@@ -36,13 +36,13 @@
   }
 
   .dark {
-    --ink: #B8B4AD;
-    --paper: #11100F;
+    --ink: #C2BEB7;
+    --paper: #1E1C1A;
     --sky: #B8922E;
     --sun: #A86B32;
     --grass: #3A8F5C;
     --coral: #1E8E82;
-    --shadow-color: rgba(0, 0, 0, 0.5);
+    --shadow-color: rgba(0, 0, 0, 0.35);
   }
 
   html {
