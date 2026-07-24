@@ -22,13 +22,13 @@
 
 @layer base {
   :root {
-    --ink: #2D2A26;
-    --paper: #FAF5EF;
-    --sky: #D97706;
-    --sun: #EA580C;
-    --grass: #15803D;
-    --coral: #0F766E;
-    --shadow-color: rgba(45, 42, 38, 0.08);
+    --ink: #3B3833;
+    --paper: #F8F5F0;
+    --sky: #B8852A;
+    --sun: #BF5B2A;
+    --grass: #1D7A42;
+    --coral: #0D6B64;
+    --shadow-color: rgba(45, 42, 38, 0.06);
 
     --font-sora: 'Sora', sans-serif;
     --font-manrope: 'Manrope', sans-serif;
@@ -36,13 +36,13 @@
   }
 
   .dark {
-    --ink: #E8E5E0;
-    --paper: #1A1917;
-    --sky: #FBBF24;
-    --sun: #FB923C;
-    --grass: #4ADE80;
-    --coral: #2DD4BF;
-    --shadow-color: rgba(0, 0, 0, 0.4);
+    --ink: #B8B4AD;
+    --paper: #11100F;
+    --sky: #B8922E;
+    --sun: #A86B32;
+    --grass: #3A8F5C;
+    --coral: #1E8E82;
+    --shadow-color: rgba(0, 0, 0, 0.5);
   }
 
   html {

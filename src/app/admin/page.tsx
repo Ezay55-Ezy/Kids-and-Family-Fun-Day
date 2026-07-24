@@ -11,11 +11,11 @@ export const metadata = {
 };
 
 const statusColors: Record<string, string> = {
-  PUBLISHED: '#16A34A',
-  DRAFT: '#F59E0B',
-  CANCELLED: '#DC2626',
-  SOLD_OUT: '#8B5CF6',
-  COMPLETED: '#F59E0B',
+  PUBLISHED: '#22884E',
+  DRAFT: '#C49A2A',
+  CANCELLED: '#B84545',
+  SOLD_OUT: '#7B6AAF',
+  COMPLETED: '#C49A2A',
 };
 
 const statusLabels: Record<string, string> = {
@@ -168,7 +168,7 @@ export default async function AdminOverviewPage() {
               data={charts.bookingsThisWeek.map((d) => ({
                 label: d.day,
                 value: d.count,
-                color: '#0F766E',
+                color: '#1E8E82',
               }))}
               height={160}
             />

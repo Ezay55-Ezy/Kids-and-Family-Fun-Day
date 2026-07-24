@@ -18,7 +18,7 @@ const categoryLabels: Record<string, string> = {
   OTHER: 'Other',
 };
 
-const chartColors = ['#F05A5A', '#4AC7D9', '#6BC96B', '#F5A623', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+const chartColors = ['#D45B5B', '#4AA8B8', '#3A8F5C', '#C49A2A', '#7B6AAF', '#C76A99', '#1E8E82', '#B8722E'];
 
 export default async function VendorAnalyticsPage() {
   const session = await auth();
@@ -65,8 +65,8 @@ export default async function VendorAnalyticsPage() {
     }));
 
   const statusData = [
-    { label: 'Published', value: data.publishedServices, color: '#6BC96B' },
-    { label: 'Draft', value: data.draftServices, color: '#F5A623' },
+    { label: 'Published', value: data.publishedServices, color: '#3A8F5C' },
+    { label: 'Draft', value: data.draftServices, color: '#C49A2A' },
   ];
 
   return (

@@ -10,16 +10,16 @@ export const metadata = {
 };
 
 const statusColors: Record<string, string> = {
-  PUBLISHED: '#16A34A',
-  DRAFT: '#F59E0B',
-  CANCELLED: '#DC2626',
-  SOLD_OUT: '#8B5CF6',
-  COMPLETED: '#F59E0B',
-  ACTIVE: '#16A34A',
-  PENDING_REVIEW: '#F59E0B',
-  APPROVED_AWAITING_PAYMENT: '#DC2626',
-  REJECTED: '#9CA3AF',
-  HIDDEN: '#9CA3AF',
+  PUBLISHED: '#22884E',
+  DRAFT: '#C49A2A',
+  CANCELLED: '#B84545',
+  SOLD_OUT: '#7B6AAF',
+  COMPLETED: '#C49A2A',
+  ACTIVE: '#22884E',
+  PENDING_REVIEW: '#C49A2A',
+  APPROVED_AWAITING_PAYMENT: '#B84545',
+  REJECTED: '#8A8680',
+  HIDDEN: '#8A8680',
 };
 
 const statusLabels: Record<string, string> = {
@@ -189,7 +189,7 @@ export default async function AdminAnalyticsPage() {
               data={analytics.bookingsOverTime.map((m) => ({
                 label: m.month,
                 value: m.count,
-                color: '#0F766E',
+                color: '#1E8E82',
               }))}
               height={200}
             />
@@ -204,7 +204,7 @@ export default async function AdminAnalyticsPage() {
               data={analytics.userRegistrationsOverTime.map((m) => ({
                 label: m.month,
                 value: m.count,
-                color: '#16A34A',
+                color: '#22884E',
               }))}
               height={200}
             />
